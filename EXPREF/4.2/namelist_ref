@@ -284,23 +284,10 @@
    ln_tair_pot = .false. !  air temperature read in "sn_tair" is already POTENTIAL TEMPERATURE, NOT ABSOLUTE (ECMWF => ln_tair_pot=.false.)
    !!   
    !! Bulk transfer coefficients over sea-ice: (relevant IF: nn_ice >=1 )
-   ln_Cx_ice_cst = .false.     ! use constant ice-air bulk transfer coefficients (value given below)
+   ln_Cx_ice_cst = .true.     ! use constant ice-air bulk transfer coefficients (value given below)
       rn_Cd_i  = 1.4e-3       ! sea-ice drag coefficient
       rn_Ce_i  = 1.4e-3       !    "    sublimation coefficient
       rn_Ch_i  = 1.4e-3       !    "    sensible heat flux coefficient
-   ln_Cx_ice_frm = .true.           ! use form drag param from Tsamadoes et al. 2014
-      nn_frm = 1              !: = 1 : affects momentum and heat transfer coefficient
-                              !:       for ocean-ice and atmos-ice (default)
-                              !: = 2 : affects only momentum transfer coefficient
-                              !:       for ocean-ice and atmos-ice
-                              !: = 3 : affect momentum and heat transfer coefficient (atmos-ice),
-                              !:       but only momentum transfer coefficient (ocean-ice)
-      csw      = 0.002        ! ice-ocn skin drag [0.0005,0.005]
-      csa      = 0.0005       ! ice-air skin drag [0.0001,0.001]
-      cra      = 0.2          ! local form drag coefficient [0,1]
-      crw      = 0.2          ! local form drag coefficient [0,1]
-      cfa      = 0.2          ! floe edge atm [0,1]
-      cfw      = 0.2          ! floe edge ocean [0,1]
    ln_Cx_ice_AN05  = .false.  !  (Andreas et al. 2005)
    ln_Cx_ice_LU12  = .false.  !  (Lupkes et al. 2012)
    ln_Cx_ice_LG15  = .false.  !  (Lupkes & Gryanik 2015)

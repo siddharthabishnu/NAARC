@@ -46,7 +46,6 @@
 
       <!-- melt ponds -->
       <field id="iceapnd"      long_name="melt pond concentration"                                 standard_name="sea_ice_meltpond_concentration"            unit=""  />
-      <field id="iceapeff"     long_name="melt pond concentration effective"                       standard_name="sea_ice_meltpond_concentration effective"  unit=""  />
       <field id="icehpnd"      long_name="melt pond depth"                                         standard_name="sea_ice_meltpond_depth"                    unit="m" />
       <field id="icevpnd"      long_name="melt pond volume"                                        standard_name="sea_ice_meltpond_volume"                   unit="m" />
       <field id="icehlid"      long_name="melt pond lid depth"                                     standard_name="sea_ice_meltpondlid_depth"                 unit="m" />
@@ -112,17 +111,6 @@
       <field id="Cd_ice"       long_name="Drag coefficient over sea-ice"                            standard_name="drag_coefficient_ice"                     unit=""     />
       <field id="Ce_ice"       long_name="Sublimation coefficient over sea-ice"                     standard_name="evap_coefficient_ice"                     unit=""     />
       <field id="Ch_ice"       long_name="Sensible heat coefficient over sea-ice"                   standard_name="sensible_heat_coefficient_ice"            unit=""     />
-      <field id="drag_io"      long_name="momentum drag coefficient ice-ocean"      standard_name="sea_ice_ocean_drag"      unit=" " />
-      <field id="drag_io_skin" long_name="momentum drag coefficient ice-ocean skin"      standard_name="sea_ice_ocean_drag skin"      unit=" " />
-      <field id="drag_io_keel" long_name="momentum drag coefficient ice-ocean keel"      standard_name="sea_ice_ocean_drag keel"      unit=" " />
-      <field id="drag_io_floe" long_name="momentum drag coefficient ice-ocean floe"      standard_name="sea_ice_ocean_drag floe"      unit=" " />
-      <field id="drag_ia"      long_name="momentum drag coefficient ice-atmosphere"      standard_name="sea_ice_atmosphere_drag"      unit=" " />
-      <field id="drag_ia_skin" long_name="momentum drag coefficient ice-atmosphere skin"      standard_name="sea_ice_atmosphere_drag skin"      unit=" " />
-      <field id="drag_ia_rdg"  long_name="momentum drag coefficient ice-atmosphere rdg"      standard_name="sea_ice_atmosphere_drag rdg"      unit=" " />
-      <field id="drag_ia_floe" long_name="momentum drag coefficient ice-atmosphere floe"      standard_name="sea_ice_atmosphere_drag floe"      unit=" " />
-      <field id="drag_ia_pond" long_name="momentum drag coefficient ice-atmosphere pond"      standard_name="sea_ice_atmosphere_drag pond"      unit=" " />
-      <field id="ardg_drag"    long_name="ridged ice concentration"      standard_name="ridged ice concentration"      unit=" " />
-      <field id="vrdg_drag"    long_name="ridged ice thickness"      standard_name="ridged ice thickness"      unit="m" />
 
       <!-- trends -->
       <field id="afxthd"       long_name="sea-ice area fraction change from thermodynamics" standard_name="tendency_of_sea_ice_area_fraction_due_to_dynamics" unit="s-1" />
@@ -336,7 +324,6 @@
       <field id="iceapnd_cat"  long_name="Ice melt pond grid fraction per category"          unit=""        />
       <field id="icevpnd_cat"  long_name="Ice melt pond volume per grid area per category"   unit="m"       />
       <field id="icehpnd_cat"  long_name="Ice melt pond thickness per category"              unit="m"       detect_missing_value="true" />
-      <field id="icevlid_cat"  long_name="Ice melt pond lid volume per category"             unit="m"       />
       <field id="icehlid_cat"  long_name="Ice melt pond lid thickness per category"          unit="m"       detect_missing_value="true" />
       <field id="iceafpnd_cat" long_name="Ice melt pond ice fraction per category"           unit=""        />
       <field id="iceaepnd_cat" long_name="Ice melt pond effective fraction per category"     unit=""        />
@@ -418,7 +405,6 @@
       <field field_ref="iceconc"          name="siconc" />
       <field field_ref="icesalt"          name="sisali" />
       <field field_ref="iceapnd"          name="siapnd" />
-      <field field_ref="iceapeff"         name="siapeff" />
       <field field_ref="icehpnd"          name="sihpnd" />
       <field field_ref="icevpnd"          name="sivpnd" />
       <field field_ref="iceage"           name="siage"  />
@@ -462,19 +448,6 @@
       <field field_ref="qemp_ice"         name="qemp_ice"   />
       <field field_ref="albedo"           name="albedo"     />
       <field field_ref="icealb"           name="icealb"     />
-
-      <field field_ref="Cd_ice"           name="Cd_ice"     />
-      <field field_ref="Ch_ice"           name="Ch_ice"     />
-      <field field_ref="Ce_ice"           name="Ce_ice"     />
-      <field field_ref="drag_io"          name="drag_io"     />
-      <field field_ref="drag_io_skin"     name="drag_io_skin"     />
-      <field field_ref="drag_io_keel"     name="drag_io_keel"     />
-      <field field_ref="drag_io_floe"     name="drag_io_floe"     />
-      <field field_ref="drag_ia"          name="drag_ia"     />
-      <field field_ref="drag_ia_skin"     name="drag_ia_skin"     />
-      <field field_ref="drag_ia_rdg"      name="drag_ia_rdg"     />
-      <field field_ref="drag_ia_floe"     name="drag_ia_floe"     />
-      <field field_ref="drag_ia_pond"     name="drag_ia_pond"     />
 
       <field field_ref="hfxcndtop"        name="hfxcndtop"  />
       <field field_ref="hfxcndbot"        name="hfxcndbot"  />
