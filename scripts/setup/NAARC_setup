@@ -101,7 +101,7 @@ esac
 
 case "${NEMO_VER}"
   in
-  4.2.2)
+  4.2|4.2.2)
            echo "NEMO Version $NEMO_VER will be checked out"
 	   ;;
   *)       echo "NEMO Version not recognised"
@@ -113,6 +113,12 @@ esac
 echo "Checking out NEMO repository"
 case "${NEMO_VER}"
   in
+    4.2)
+           git clone --filter=blob:none --no-checkout --depth 1 --sparse --branch branch_4.2 https://forge.nemo-ocean.eu/nemo/nemo.git nemo
+           cd nemo
+           git sparse-checkout add /makenemo /mk /src /cfgs/SHARED /cfgs/ref_cfgs.txt /ext
+           git checkout
+           ;;
   4.2.2)
            git clone --filter=blob:none --no-checkout --depth 1 --sparse --branch $NEMO_VER https://forge.nemo-ocean.eu/nemo/nemo.git nemo
            cd nemo
@@ -232,6 +238,17 @@ find $REPO_DIR/scripts/run -maxdepth 1 -type f -execdir cp "{}" $CONFIG_DIR/EXPR
 
 cp $REPO_DIR/CPP/$NEMO_VER/cpp_NAARC.fcm $CONFIG_DIR/
  
+# copy CPOM changes for form drag into MY_SRC if 4.2.2
+
+cd $CONFIG_DIR/MY_SRC
+
+for fname in  icefrm.F90 icedyn_rhg_eap.F90 iceistate.F90 icesbc.F90 iceupdate.F90 icedyn_rhg_evp.F90 ice.F90 icestp.F90 icevar.F90 icewri.F90 icethd_pnd.F90
+do
+  curl https://forge.nemo-ocean.eu/nemo/nemo/-/raw/338-cpom-developments-for-nemov4-2/src/ICE/$fname -o $fname
+done
+
+curl https://forge.nemo-ocean.eu/nemo/nemo/-/raw/338-cpom-developments-for-nemov4-2/src/OCE/SBC/sbcblk.F90 -o sbcblk.F90
+
 cd $CONFIG_DIR/EXPREF
 
 # Add ENV into runscipts
