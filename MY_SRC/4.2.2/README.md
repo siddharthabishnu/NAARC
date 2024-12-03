@@ -1,0 +1,73 @@
+Summary of code updates
+=======================
+
+diahth.F90:
+   why?
+diawri.F90:
+   why?
+domain.F90:
+   why?
+dommsk.F90:
+   why?
+dtatsd.F90:
+   why?
+dynspg_ts.F90:
+   why?
+fldread.F90:
+   why?
+icedyn_rhg_eap.F90:
+   why?
+icedyn_rhg_evp.F90:
+   why?
+ice.F90:
+   why?
+icefrm.F90:
+   why?
+iceistate.F90:
+   why?
+icerst.F90:
+   why?
+icesbc.F90:
+   why?
+icestp.F90:
+   why?
+icethd_pnd.F90:
+   why?
+iceupdate.F90:
+   why?
+icevar.F90:
+   why?
+icewri.F90:
+   why?
+in_out_manager.F90:
+   why?
+iom.F90:
+   why?
+istate.F90:
+   why?
+ldftra.F90:
+   why?
+README.md:
+   why?
+restart.F90:
+   why?
+sbcblk.F90:
+   why?
+sbc_oce.F90:
+   why?
+sbcrnf.F90:
+   why?
+sbcssm.F90:
+   why?
+tide.h90:
+   why?
+tide_mod.F90:
+   why?
+traldf_triad.F90:
+   why?
+traqsr.F90:
+   why?
+zdfgls.F90:
+   why?
+zdftke.F90:
+   why?
