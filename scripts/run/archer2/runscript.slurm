@@ -55,12 +55,12 @@ export UCX_IB_REG_METHODS=direct
 #################### nemo runscript options ############################
 # For info on the parameters see namelist_ref                          #
 ########################################################################
-rn_rdt=300          ; ln_zps='.false.'       ; ln_tmx_itf='.false.'
+rn_rdt=300          ; ln_zps='.false.'      ; ln_tmx_itf='.false.'
 ln_bt_auto='.true.' ; rn_bt_cmax=0.8        ; nn_baro=30
 nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.true.'
-ln_rstdate='.true.' ; ln_shlat2d='.false.'   ; nn_diaharm=1981
-rn_Cd0=2.5e-3       ; ln_loglayer='.true.' ; ln_tide='.true.'
-ln_boost='.false.'  ; ln_gls='.true.'      ; ln_int_wave_drag='.false.' 
+ln_rstdate='.true.' ; ln_shlat2d='.false.'  ; nn_diaharm=1981
+rn_Cd0=2.5e-3       ; ln_loglayer='.true.'  ; ln_tide='.true.'
+ln_boost='.false.'  ; ln_gls='.true.'       ; ln_int_wave_drag='.false.' 
 ln_hpg_djc='.true.' ;                         ln_calc_tdiss='.false.'
 ########################################################################
 
@@ -68,8 +68,8 @@ ln_hpg_djc='.true.' ;                         ln_calc_tdiss='.false.'
 #################### runscript options #################################
 # Controls for the simulation                                          #
 ########################################################################
-ln_spin='.true.'    # Do we require a spin up phase for the ice
-nn_spin=3           # How many years spin up
+ln_spin='.false.'    # Do we require a spin up phase for the ice
+nn_spin=0           # How many years spin up
 year_st=1979        # Start year of the simulation (ramains constant)
 year_en=2019        # End year of this job submission
 offset=0            # If rdt has changed, an offset to nn_it000 is needed
@@ -82,7 +82,6 @@ year=$YEAR          # Change if starting job part way through simulation
 #                No need to edit below this line                       #
 ########################################################################
 
-echo 'here'
 if [ "$ln_zps" = ".false." ]
 then
 
@@ -111,7 +110,6 @@ then
 
 else
 
-   echo 'here2'
    #################### nemo runscript options #########################
    # The following options are for the ZPS domain_cfg.nc               #
    #####################################################################
@@ -137,6 +135,7 @@ fi
 if [ "$ln_zps" = ".true." ]
 then
    ln_trabbl='.true.'
+   ln_traldf_triads='.false.'
    ln_traldf_hor='.false.'
    ln_traldf_iso='.true.'
    ln_hpg_prj='.false.'
@@ -144,7 +143,8 @@ then
    ln_hpg_djc='.false.' 
 else
    ln_trabbl='.false.'
-   ln_traldf_hor='.true.'
+   ln_traldf_triads='.true.'
+   ln_traldf_hor='.false.'
    ln_traldf_iso='.false.'
    if [ "$ln_hpg_djc" = ".true." ]
    then
@@ -207,7 +207,7 @@ do
       nam="${ens%%:*}"
       jpk="${ens##*:}"
 
-      if [ $year -eq $nn_diaharm ] &&  [ "$ln_tide" = ".true." ]
+      if [ $year -eq $nn_diaharm ] && [ "$ln_tide" = ".true." ]
       then
 	 ln_diaharm='.true.'
       else
@@ -217,7 +217,7 @@ do
       if [ $year -eq $year_st ]
       then
          nn_it000=1
-	 if [ $nn_spin_cycle -eq 1 ]
+	 if [ $nn_spin_cycle -eq 1 ] || [ "$ln_spin" = ".false." ]
          then
             ln_rstart='.false.'	  
 	    ln_tide_ramp='.true.'
@@ -246,7 +246,7 @@ do
       fi 
 
       nn_itend=`./end_time_step $year $rn_rdt $year_st`; nn_itend=$(( $nn_itend + $offset ))
-      if [ $nn_spin_cycle -le $nn_spin ]
+      if [ $nn_spin_cycle -le $nn_spin ] && [ "$ln_spin" = ".true." ] 
       then
          sed    "s/XXX_EXP_XXX/$nam\_S$nn_spin_cycle/g" namelist_cfg_template > namelist_cfg
          sed -i "s/XXX_RS0_XXX/$nam\_S$(($nn_spin_cycle-1))_$rs0\_restart/g" namelist_cfg
@@ -286,6 +286,7 @@ do
       sed -i "s/XXX_BBL_XXX/$ln_trabbl/g" namelist_cfg
       sed -i "s/XXX_HOR_XXX/$ln_traldf_hor/g" namelist_cfg
       sed -i "s/XXX_ISO_XXX/$ln_traldf_iso/g" namelist_cfg
+      sed -i "s/XXX_TRI_XXX/$ln_traldf_triads/g" namelist_cfg
       sed -i "s/XXX_PRJ_XXX/$ln_hpg_prj/g" namelist_cfg
       sed -i "s/XXX_DJC_XXX/$ln_hpg_djc/g" namelist_cfg
       sed -i "s/XXX_SCO_XXX/$ln_hpg_sco/g" namelist_cfg
