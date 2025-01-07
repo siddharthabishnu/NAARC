@@ -199,7 +199,9 @@ case "${HPC_TARG}"
            ;;
 
   *)       wget http://gws-access.ceda.ac.uk/public/jmmp/NAARC/inputs.tar.gz
+           wget http://gws-access.ceda.ac.uk/public/jmmp/NAARC/forcing.tar.gz
            tar xvfz inputs.tar.gz
+           tar xvfz forcing.tar.gz
            ;;
 esac
 
