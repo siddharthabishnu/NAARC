@@ -13,11 +13,11 @@ The NAARC configuration is based on NEMO v4.2.2 with a horizontal resolution of 
 
 The key features are summarised below:
 
-    * 1/12$^{\circ}$ nominal horizontal resolution (j=3605, i=4320).
-    * 75 vertical Multi-Evelope s-levels (MEs).
-    * Coupled to [SI$^{3}$](https://doi.org/10.5281/zenodo.7534900) sea ice engine.
-    * Initialised from [eORCA025 NOC-Near-Present-Day](https://noc-msm.github.io/NOC_Near_Present_Day) (1979) simulations.
-    * Forced with JRA55-do (v1; 1976-2023) atmospheric and riverine forcing.
+* 1/12$^{\circ}$ nominal horizontal resolution (j=3605, i=4320).
+* 75 vertical Multi-Evelope s-levels (MEs).
+* Coupled to [SI$^{3}$](https://doi.org/10.5281/zenodo.7534900) sea ice engine.
+* Initialised from [eORCA025 NOC-Near-Present-Day](https://noc-msm.github.io/NOC_Near_Present_Day) (1979) simulations.
+* Forced with JRA55-do (v1; 1976-2023) atmospheric and riverine forcing.
 
 For more details on the NAARC configuration see [Deep Dives: Model Configurations].
 
