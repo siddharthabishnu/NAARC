@@ -9,7 +9,7 @@
 
 display_usage() {
    echo
-   echo "  Runscript: SE-eORCA025 on ARCHER2"
+   echo "  Runscript: NAARC on ARCHER2/Anemone"
    echo "  ***************************************"
    echo
    echo "  usage: ${0##*/} -y year -s spin"
@@ -71,7 +71,7 @@ ln_hpg_djc='.true.' ;                         ln_calc_tdiss='.false.'
 ln_spin='.false.'    # Do we require a spin up phase for the ice
 nn_spin=0           # How many years spin up
 year_st=1979        # Start year of the simulation (ramains constant)
-year_en=2019        # End year of this job submission
+year_en=1979        # End year of this job submission
 offset=0            # If rdt has changed, an offset to nn_it000 is needed
 nn_spin_cycle=$SPIN # Change to nn_spin+1 if year is .gt. year_st
 year=$YEAR          # Change if starting job part way through simulation
@@ -174,13 +174,15 @@ fi
 if [ "$ln_rnf_new" = ".true." ]
 then
 	sn_rnf="'eORCA12_rivers',24,'rorunoff',.false.,.false.,'yearly'"
+	sn_cnf="'JRA55_eORCA12coef'   ,       -12.        , 'socoefr',   .false.   , .true. , 'yearly'"
 else
 	sn_rnf="'runoff_1m_nomask.nc',-1,'sornficb',.true.,.true.,'yearly'"
+	sn_cnf="'runoff_1m_nomask.nc'   ,       -12.        , 'socoefr',   .false.   , .true. , 'yearly'"
 fi
 
 echo $SLURM_NNODES
 
-. XXX_ENV_XXX
+. /work/n01/n01/jdha/cfgs/NAARC/scripts/env/archer2/gnu-mpich-ucx
 export LD_LIBRARY_PATH=${CRAY_LD_LIBRARY_PATH}:${LD_LIBRARY_PATH}
 export OMP_NUM_THREADS=1
 
@@ -274,6 +276,7 @@ do
       sed -i "s/XXX_BTA_XXX/$ln_bt_auto/g" namelist_cfg
       sed -i "s/XXX_BTC_XXX/$rn_bt_cmax/g" namelist_cfg
       sed -i "s/XXX_RNF_XXX/$sn_rnf/g" namelist_cfg
+      sed -i "s/XXX_CNF_XXX/$sn_cnf/g" namelist_cfg
       sed -i "s/XXX_TID_XXX/$ln_tide/g" namelist_cfg
       sed -i "s/XXX_ITF_XXX/$ln_tmx_itf/g" namelist_cfg
       sed -i "s/XXX_DHM_XXX/$ln_diaharm/g" namelist_cfg
