@@ -8,7 +8,7 @@ display_usage() {
    echo "  ***************************************"
    echo
    echo "  usage: ${0##*/} -p path_to_install -r path_to_repo -n nemo_version"
-   echo "                  -x xios_version -m machine -c compiler -a mpi_build"
+   echo "                  -x xios_version -m machine -c compiler -a mpi_build [-d]"
    echo
    echo "  flags:  -p full path to where nemo/xios will be installed"
    echo "          -r full path to where this reposiotry resides"
@@ -17,29 +17,20 @@ display_usage() {
    echo "          -m machine name"
    echo "          -c compiler [gnu|cray|ifort]"
    echo "          -a MPI build [mpich|impi]"
+   echo "          -d download input data [optional]"
    echo
    exit 1
 	}
 # check whether user had supplied -h or --help . If yes display usage
-	if [[ ( $# == "--help") ||  $# == "-h" ]]
+	if [[ ( $1 == "--help") ||  $1 == "-h" ]]
 	then
 		display_usage
 		exit 0
 	fi
-# if less than three arguments supplied, display usage
-	if [  $# -le 13 ]
-	then
-		display_usage
-		exit 1
-	fi
-# if less than two arguments supplied, display usage
-	if [  $# -ge 15 ]
-	then
-		display_usage
-		exit 1
-	fi
 
-while getopts p:r:m:n:x:c:a: option
+export DIO_TARG=false
+
+while getopts p:r:m:n:x:c:a:d option
   do
   case "${option}"
   in
@@ -50,10 +41,19 @@ while getopts p:r:m:n:x:c:a: option
   x) export XIOS_VER=${OPTARG};;
   c) export COMPILER=${OPTARG};;
   a) export MPI_TARG=${OPTARG};;
+  d) export DIO_TARG=true;;
   :) printf "missing argument for -%s\n" "$OPTARG" >&2; display_usage; exit 1;;
  \?) printf "illegal option: -%s\n" "$OPTARG" >&2; display_usage; exit 1;;
   esac
 done
+
+# Validate required arguments
+        if [[ -z "$WORK_DIR" || -z "$REPO_DIR" || -z "$HPC_TARG" || -z "$NEMO_VER" || -z "$XIOS_VER" || -z "$COMPILER" || -z "$MPI_TARG" ]]
+	then
+                echo "Missing required arguments."
+		display_usage
+		exit 0
+        fi
 
 if [ ${WORK_DIR:0:1} != "/" ]; then
   echo "WORK_DIR must use full path"
@@ -76,6 +76,7 @@ echo "Making sure that the correct modules are loaded"
 case "${HPC_TARG}"
   in
   archer2) ENV_FILE=$REPO_DIR/scripts/env/archer2/${COMPILER}-${MPI_TARG}-ucx
+           echo $ENV_FILE
            if [ -f "$ENV_FILE" ]; then
              . $REPO_DIR/scripts/env/archer2/${COMPILER}-${MPI_TARG}-ucx
 	   else
@@ -188,22 +189,25 @@ export CONFIG_DIR=$WORK_DIR/nemo/cfgs/NAARC
 cd $CONFIG_DIR
 
 ## Download the input data
-case "${HPC_TARG}"
-  in
-  archer2) ln -s /work/n01/shared/NAARC/$NEMO_VER INPUTS
-           ln -s /work/n01/shared/nemo/FORCING FORCING
-           ;;
 
-  anemone) ln -s /dssgfs01/working/jdha/NAARC/$NEMO_VER INPUTS
-	   ln -s /dssgfs01/working/acc/FORCING FORCING
-           ;;
+if "${DIO_TARG}"
+then
+  wget http://gws-access.ceda.ac.uk/public/jmmp/NAARC/inputs.tar.gz
+  wget http://gws-access.ceda.ac.uk/public/jmmp/NAARC/forcing.tar.gz
+  tar xvfz inputs.tar.gz
+  tar xvfz forcing.tar.gz
+else
+  case "${HPC_TARG}"
+    in
+    archer2) ln -s /work/n01/shared/NAARC/$NEMO_VER INPUTS
+             ln -s /work/n01/shared/nemo/FORCING FORCING
+             ;;
 
-  *)       wget http://gws-access.ceda.ac.uk/public/jmmp/NAARC/inputs.tar.gz
-           wget http://gws-access.ceda.ac.uk/public/jmmp/NAARC/forcing.tar.gz
-           tar xvfz inputs.tar.gz
-           tar xvfz forcing.tar.gz
-           ;;
-esac
+    anemone) ln -s /dssgfs01/working/jdha/NAARC/$NEMO_VER INPUTS
+             ln -s /dssgfs01/working/acc/FORCING FORCING
+             ;;
+  esac
+fi
 
 cp -r $REPO_DIR/EXPREF/$NEMO_VER/ EXPREF
 cd $CONFIG_DIR/EXPREF
