@@ -182,7 +182,8 @@ fi
 
 echo $SLURM_NNODES
 
-. /work/n01/n01/jdha/cfgs/NAARC/scripts/env/archer2/gnu-mpich-ucx
+. XXX_ENV_XXX
+
 export LD_LIBRARY_PATH=${CRAY_LD_LIBRARY_PATH}:${LD_LIBRARY_PATH}
 export OMP_NUM_THREADS=1
 
