@@ -24,10 +24,10 @@
    jpl              =   5             !  number of ice  categories
    nlay_i           =   4             !  number of ice  layers
    nlay_s           =   1             !  number of snow layers
-   ln_virtual_itd   = .false.,       !  virtual ITD mono-category parameterization (jpl=1 only)
+   ln_virtual_itd   =.false.,       !  virtual ITD mono-category parameterization (jpl=1 only)
                                       !     i.e. enhanced thermal conductivity & virtual thin ice melting
-   ln_icedyn        = .true.,          !  ice dynamics (T) or not (F)
-   ln_icethd        = .true.,          !  ice thermo   (T) or not (F)
+   ln_icedyn        =.true.,          !  ice dynamics (T) or not (F)
+   ln_icethd        =.true.,          !  ice thermo   (T) or not (F)
    rn_amax_n        =   0.997         !  maximum tolerated ice concentration NH
    rn_amax_s        =   0.997         !  maximum tolerated ice concentration SH
    cn_icerst_in     = "XXX_RS0_XXX"   !  suffix of ice restart name (input)
@@ -38,9 +38,9 @@
 !------------------------------------------------------------------------------
 &namdyn_rhg     !   Ice rheology
 !------------------------------------------------------------------------------
-   ln_rhg_EVP       = .true.,          !  EVP rheology
-   ln_rhg_EAP       = .false.,         !  EAP rheology
-      ln_aEVP       = .true.,          !     adaptive rheology (Kimmritz et al. 2016 & 2017)
+   ln_rhg_EVP       =.true.,          !  EVP rheology
+   ln_rhg_EAP       =.false.,         !  EAP rheology
+      ln_aEVP       =.true.,          !     adaptive rheology (Kimmritz et al. 2016 & 2017)
       rn_creepl     =   2.0e-9        !     creep limit [1/s]
       rn_ecc        =   2.0           !     eccentricity of the elliptical yield curve
       nn_nevp       = 120             !     number of EVP subcycles
@@ -51,7 +51,7 @@
                                       !     = 1  check at the main time step (output xml: uice_cvg)
                                       !     = 2  check at both main and rheology time steps (additional output: ice_cvg.nc)
                                       !          this option 2 asks a lot of communications between cpu
-   ln_rhg_VP        = .false.,         !  VP rheology
+   ln_rhg_VP        =.false.,         !  VP rheology
       nn_vp_nout    = 10              !     number of outer iterations
       nn_vp_ninn    = 1500            !     number of inner iterations
       nn_vp_chkcvg  = 5               !     iteration step for convergence check
@@ -65,14 +65,17 @@
 !------------------------------------------------------------------------------
 &namini         !   Ice initialization
 !------------------------------------------------------------------------------
-   ln_iceini        = .true.,          !  activate ice initialization (T) or not (F)
+   ln_iceini        =.true.,          !  activate ice initialization (T) or not (F)
    nn_iceini_file   =   1             !     0 = Initialise sea ice based on SSTs
                                       !     1 = Initialise sea ice from single category netcdf file
                                       !     2 = Initialise sea ice from multi category restart file
    ! -- for nn_iceini_file = 1
-   sn_hti = 'Ice_initialization'    , -1. ,'sithic'   ,  .false.  , .true., 'monthly'  , '' , '', ''
-   sn_hts = 'Ice_initialization'    , -1. ,'snthic'   ,  .false.  , .true., 'monthly'  , '' , '', ''
-   sn_ati = 'Ice_initialization'    , -1. ,'siconc'   ,  .false.  , .true., 'monthly'  , '' , '', ''
+   sn_hti = 'INPUTS/Ice_initialization'    , -1. ,'sithic'   ,  .false.  , .true., 'monthly'  , '' , '', ''
+   sn_hts = 'INPUTS/Ice_initialization'    , -1. ,'snthic'   ,  .false.  , .true., 'monthly'  , '' , '', ''
+   sn_ati = 'INPUTS/Ice_initialization'    , -1. ,'siconc'   ,  .false.  , .true., 'monthly'  , '' , '', ''
+   sn_smi = 'NOT USED'    , -12. ,'smi'   ,  .false.  , .true., 'yearly'  , '' , '', ''
+   sn_tmi = 'NOT USED'    , -12. ,'tmi'   ,  .false.  , .true., 'yearly'  , '' , '', ''
+   sn_tsu = 'NOT USED'    , -12. ,'tsu'   ,  .false.  , .true., 'yearly'  , '' , '', ''
 /
 !------------------------------------------------------------------------------
 &namalb         !   albedo parameters
