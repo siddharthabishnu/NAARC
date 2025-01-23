@@ -37,7 +37,7 @@
    cn_exp      =  "XXX_EXP_XXX"  !  experience name
 !  nn_it000    =    XXX_TST_XXX   !  first time step
    nn_itend    =    8928   !  last  time step (std 5840)
-   nn_itend    =    XXX_TEN_XXX   !  last  time step (std 5840)
+!  nn_itend    =    XXX_TEN_XXX   !  last  time step (std 5840)
    nn_date0    =  XXX_YEAR_XXX0101   !  date at nit_0000 (format yyyymmdd) used if ln_rstart=F or (ln_rstart=T and nn_rstctl=0 or 1)
    nn_time0    =       0000   !  initial time of day in hhmm
    nn_leapy    =       1   !  Leap year calendar (1) or not (0)
@@ -881,6 +881,11 @@
 &nam_dia25h    !  25h Mean Output                                       (default: OFF)
 !-----------------------------------------------------------------------
    ln_dia25h   = .false.,   ! Choose 25h mean output or not
+/
+!-----------------------------------------------------------------------
+&nam_pea
+!-----------------------------------------------------------------------
+   ln_pea= .false.,
 /
 !-----------------------------------------------------------------------
 &namnc4        !   netcdf4 chunking and compression settings            ("key_netcdf4")
