@@ -1178,6 +1178,8 @@ that are available in the tidal-forcing implementation (see
     <field id="utrd_tot2d"     long_name="i-trend: total momentum trend before atf: 2D component"  unit="m/s^2"  grid_ref="grid_U_2D"  />
     <field id="utrd_atf"       long_name="i-trend: asselin time filter trend"                      unit="m/s^2"                        />
     <field id="utrd_atm2d"     long_name="i-trend: atmospheric pressure: 2D component "            unit="m/s^2"  grid_ref="grid_U_2D"  />  
+    <field id="utrd_bdy2d"     long_name="i-trend: lateral boundary forcing: 2D component "        unit="m/s^2"  grid_ref="grid_U_2D"  />
+    <field id="utrd_bdy"       long_name="i-trend: lateral boundary forcing "                      unit="m/s^2"                        />
     <!-- thickness weighted versions -->
     <field id="utrd_hpg_e3u"       unit="m2/s^2" > utrd_hpg * e3u </field>
     <field id="utrd_spg_e3u"       unit="m2/s^2" > utrd_spg * e3u </field>
@@ -1227,6 +1229,8 @@ that are available in the tidal-forcing implementation (see
     <field id="vtrd_tot2d"     long_name="j-trend: total momentum trend before atf: 2D component"  unit="m/s^2"  grid_ref="grid_V_2D"  />
     <field id="vtrd_atf"       long_name="j-trend: asselin time filter trend"                      unit="m/s^2"                        />
     <field id="vtrd_atm2d"     long_name="j-trend: atmospheric pressure: 2D component "            unit="m/s^2"  grid_ref="grid_V_2D"  />
+    <field id="vtrd_bdy2d"     long_name="j-trend: lateral boundary forcing: 2D component "        unit="m/s^2"  grid_ref="grid_V_2D"  />
+    <field id="vtrd_bdy"       long_name="j-trend: lateral boundary forcing "                      unit="m/s^2"                        />
     <!-- thickness weighted versions -->
     <field id="vtrd_hpg_e3v"       unit="m2/s^2" > vtrd_hpg * e3v </field>
     <field id="vtrd_spg_e3v"       unit="m2/s^2" > vtrd_spg * e3v </field>
