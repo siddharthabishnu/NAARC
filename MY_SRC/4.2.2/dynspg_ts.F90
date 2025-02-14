@@ -1567,6 +1567,11 @@ CONTAINS
       !
       IF( ln_isfcav.OR.ln_drgice_imp ) THEN
          !
+         IF( l_trddyn ) THEN
+            ptfrtrdu(:,:) = pu_RHSi(:,:)
+            ptfrtrdv(:,:) = pv_RHSi(:,:)
+         ENDIF
+         !
          IF( ln_bt_fw ) THEN                ! FORWARD integration: use NOW top baroclinic velocity
             
             DO_2D( 0, 0, 0, 0 )
