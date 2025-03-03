@@ -730,7 +730,7 @@
       rn_hsbfr =    1.6       !  heat/salt buoyancy flux ratio
    !
    !                       ! gravity wave-driven vertical mixing
-   ln_zdfiwm   = .true.,      ! internal wave-induced mixing            (T =>   fill namzdf_iwm)
+   ln_zdfiwm   = .false.,      ! internal wave-induced mixing            (T =>   fill namzdf_iwm)
    ln_zdfswm   = .false.,      ! surface  wave-induced mixing            (T => ln_wave=ln_sdw=T )
    !
    !                       ! coefficients
