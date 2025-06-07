@@ -57,8 +57,8 @@ export UCX_IB_REG_METHODS=direct
 ########################################################################
 rn_rdt=300          ; ln_zps='.false.'      ; ln_tmx_itf='.false.'
 ln_bt_auto='.true.' ; rn_bt_cmax=0.8        ; nn_baro=30
-nn_mxlice=3         ; nn_z0_ice=1           ; ln_rnf_new='.true.'
-ln_rstdate='.true.' ; ln_shlat2d='.false.'  ; nn_diaharm=1981
+nn_mxlice=2         ; nn_z0_ice=1           ; ln_rnf_new='.false.'
+ln_rstdate='.true.' ; ln_shlat2d='.false.'  ; nn_diaharm=1991
 rn_Cd0=2.5e-3       ; ln_loglayer='.true.'  ; ln_tide='.true.'
 ln_boost='.false.'  ; ln_gls='.true.'       ; ln_int_wave_drag='.false.' 
 ln_hpg_djc='.true.' ;                         ln_calc_tdiss='.false.'
@@ -155,6 +155,13 @@ else
    ln_hpg_sco='.false.'
 fi
 
+if [ "$ln_tide" = ".true." ]
+then
+   nn_dyn2d_dta=3 
+else
+   nn_dyn2d_dta=1
+fi
+
 if [ "$ln_loglayer" = ".true." ]
 then
    ln_non_lin='.false.'
@@ -176,8 +183,8 @@ then
 	sn_rnf="'eORCA12_rivers',24,'rorunoff',.false.,.false.,'yearly'"
 	sn_cnf="'JRA55_eORCA12coef'   ,       -12.        , 'socoefr',   .false.   , .true. , 'yearly'"
 else
-	sn_rnf="'runoff_1m_nomask.nc',-1,'sornficb',.true.,.true.,'yearly'"
-	sn_cnf="'runoff_1m_nomask.nc'   ,       -12.        , 'socoefr',   .false.   , .true. , 'yearly'"
+	sn_rnf="'runoff_1m_nomask',-1,'sornficb',.true.,.true.,'yearly'"
+	sn_cnf="'runoff_1m_nomask'   ,       -12.        , 'socoefr',   .false.   , .true. , 'yearly'"
 fi
 
 echo $SLURM_NNODES
@@ -279,6 +286,7 @@ do
       sed -i "s/XXX_RNF_XXX/$sn_rnf/g" namelist_cfg
       sed -i "s/XXX_CNF_XXX/$sn_cnf/g" namelist_cfg
       sed -i "s/XXX_TID_XXX/$ln_tide/g" namelist_cfg
+      sed -i "s/XXX_BTD_XXX/$nn_dyn2d_dta/g" namelist_cfg
       sed -i "s/XXX_ITF_XXX/$ln_tmx_itf/g" namelist_cfg
       sed -i "s/XXX_DHM_XXX/$ln_diaharm/g" namelist_cfg
       sed -i "s/XXX_BOO_XXX/$ln_boost/g" namelist_cfg
