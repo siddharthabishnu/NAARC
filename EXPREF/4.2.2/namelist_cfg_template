@@ -887,16 +887,19 @@
    ln_PE_trd   =.false.,   ! (T) 3D Potential Energy     trends
    ln_tra_trd  =.false.,   ! (T) 3D tracer trend output
    ln_tra_mxl  =.false.,   ! (T) 2D tracer trends averaged over the mixed layer (not coded yet)
-   nn_trd      = 365       !  print frequency (ln_glo_trd=T) (unit=time step)
+!  nn_trd      = 365       !  print frequency (ln_glo_trd=T) (unit=time step)
 /
-!!gm   nn_ctls     =   0       !  control surface type in mixed-layer trends (0,1 or n<jpk)
-!!gm   rn_ucf      =   1.      !  unit conversion factor (=1 -> /seconds ; =86400. -> /day)
-!!gm   cn_trdrst_in      = "restart_mld"   ! suffix of ocean restart name (input)
-!!gm   cn_trdrst_out     = "restart_mld"   ! suffix of ocean restart name (output)
-!!gm   ln_trdmld_restart =.false.,         !  restart for ML diagnostics
-!!gm   ln_trdmld_instant =.false.,         !  flag to diagnose trends of instantantaneous or mean ML T/S
-!!gm
 !-----------------------------------------------------------------------
+&namtrd_mxl
+!-----------------------------------------------------------------------
+   nn_trd      = 1       !  print frequency (ln_glo_trd=T) (unit=time step)
+   nn_ctls     =   0       !  control surface type in mixed-layer trends (0,1 or n<jpk)
+   rn_ucf      =   86400.      !  unit conversion factor (=1 -> /seconds ; =86400. -> /day)
+   cn_trdrst_in      = 'restart_mld'   ! suffix of ocean restart name (input)
+   cn_trdrst_out     = 'restart_mld'   ! suffix of ocean restart name (output)
+   ln_trdmxl_restart = .false.         !  restart for ML diagnostics
+   ln_trdmxl_instant = .true.         !  flag to diagnose trends of instantantaneous or mean ML T/S
+   rn_rho_c = 0.01
 &namhsb        !  Heat and salt budgets                                 (default: OFF)
 !-----------------------------------------------------------------------
    ln_diahsb   =.false.,   !  output the heat and salt budgets (T) or not (F)
