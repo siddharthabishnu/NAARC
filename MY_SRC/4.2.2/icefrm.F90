@@ -18,7 +18,7 @@ MODULE icefrm
    USE timing               ! timing
    USE phycst               ! physical constants
    USE eosbn2               ! equation of state
-   USE sbcblk , ONLY : nn_frm, csw, csa, cra, crw, cfa, cfw, rn_Cd_i ! FORM drag param
+   USE sbcblk , ONLY : nn_frm, csw, csa, cra, crw, cfa, cfw, rn_Cd_i, rn_frm_ht0 ! FORM drag param
 
    IMPLICIT NONE
    PRIVATE
@@ -376,6 +376,12 @@ CONTAINS
          drag_io(ji,jj) = zdrag_io_skin(ji,jj) + zdrag_io_floe(ji,jj) + zdrag_io_keel(ji,jj)
          drag_io(ji,jj) = min( drag_io(ji,jj) , cwmax )
          drag_io(ji,jj) = max( drag_io(ji,jj) , cwmin )
+      
+      !--------------------------------!
+      ! JDHA adjustment close to coast !
+      !--------------------------------!
+         
+         IF (ht_0(ji,jj) <= rn_frm_ht0) drag_io(ji,jj) = rn_cio
 
       ENDDO               ! ij
 

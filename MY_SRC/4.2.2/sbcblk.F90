@@ -125,6 +125,7 @@ MODULE sbcblk
                                           !transfer coefficient (atmos-ice), 
                                           !:       but only momentum transfer
                                           !coefficient (ocean-ice)
+   REAL(wp), PUBLIC ::   rn_frm_ht0       !: only apply form drag in ocean deeper than rn_frm_ht0 else use ln_Cx_ice_cst
    REAL(wp), PUBLIC ::   csw              ! ice-ocn skin drag [0.0005,0.005]
    REAL(wp), PUBLIC ::   csa              ! ice-air skin drag [0.0001,0.001]
    REAL(wp), PUBLIC ::   cra              ! local form drag coefficient [0,1]
@@ -245,7 +246,7 @@ CONTAINS
          &                 rn_pfac, rn_efac,                                          &
          &                 ln_crt_fbk, rn_stau_a, rn_stau_b,                          &   ! current feedback
          &                 ln_humi_sph, ln_humi_dpt, ln_humi_rlh, ln_tair_pot,        &
-         &                 ln_Cx_ice_cst, ln_Cx_ice_frm, nn_frm, rn_Cd_i, rn_Ce_i, rn_Ch_i,  &
+         &                 ln_Cx_ice_cst, ln_Cx_ice_frm, nn_frm, rn_frm_ht0, rn_Cd_i, rn_Ce_i, rn_Ch_i,  &
          &                 csw, csa, cra, crw, cfa, cfw,                              &   ! Form Drag params
          &                 ln_Cx_ice_AN05, ln_Cx_ice_LU12, ln_Cx_ice_LG15,            &
          &                 cn_dir,                                                    &
@@ -1101,13 +1102,14 @@ CONTAINS
             &                      Cd_ice, Ch_ice, Ce_ice, theta_zu_i, q_zu_i )
          !!
       CASE ( np_ice_frm )
-         Cd_ice(:,:) = drag_ia(:,:)
+         Cd_ice(:,:) = rn_Cd_i
+         WHERE ( ht_0(:,:) > rn_frm_ht0 ) Cd_ice(:,:) = drag_ia(:,:)
          ! no height adjustment, keeping zt values:
          theta_zu_i(:,:) = ptair(:,:)
          q_zu_i(:,:)     = pqair(:,:)
          IF ( nn_frm == 1 .or. nn_frm == 3 ) THEN
-           Ch_ice(:,:) = drag_ia(:,:)
-           Ce_ice(:,:) = drag_ia(:,:)
+           Ch_ice(:,:) = Cd_ice(:,:)
+           Ce_ice(:,:) = Cd_ice(:,:)
          ELSE
            Ch_ice(:,:) = rn_Ch_i
            Ce_ice(:,:) = rn_Ce_i

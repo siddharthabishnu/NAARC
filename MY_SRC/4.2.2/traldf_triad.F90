@@ -134,9 +134,13 @@ CONTAINS
          IF( ln_ldfeiv ) THEN
             CALL lbc_lnk( 'traldf_triad', triadi_g(:,:,:,1,:), 'U', -1.0_wp,  &
                &                          triadj_g(:,:,:,1,:), 'V', -1.0_wp )
+            CALL lbc_lnk( 'traldf_triad', triadi_g(:,:,:,0,:), 'U', -1.0_wp,  &
+               &                          triadj_g(:,:,:,0,:), 'V', -1.0_wp )
          ENDIF
          CALL lbc_lnk( 'traldf_triad', triadi(:,:,:,1,:), 'U', -1.0_wp,  &
             &                          triadj(:,:,:,1,:), 'V', -1.0_wp )
+         CALL lbc_lnk( 'traldf_triad', triadi(:,:,:,0,:), 'U', -1.0_wp,  &
+            &                          triadj(:,:,:,0,:), 'V', -1.0_wp )
 
       ENDIF
       !
