@@ -33,6 +33,35 @@
           <field field_ref="sshsteric"    name="sshsteric"  />
         </file>
 
+        <file id="file19" name_suffix="_mxl" description="mixed layer variables" >
+          <field field_ref="mxl_depth"   name="mxl_depth" />
+          <field field_ref="tml"         name="tml"       />
+          <field field_ref="tml_tot"     name="tml_tot"   />
+          <field field_ref="tml_res"     name="tml_res"   />
+          <field field_ref="tml_xad"     name="tml_xad"   />
+          <field field_ref="tml_yad"     name="tml_yad"   />
+          <field field_ref="tml_zad"     name="tml_zad"   />
+          <field field_ref="tml_ldf"     name="tml_ldf"   />
+          <field field_ref="tml_for"     name="tml_for"   />
+          <field field_ref="tml_zdf"     name="tml_zdf"   />
+          <field field_ref="tml_bbc"     name="tml_bbc"   />
+          <field field_ref="tml_bbl"     name="tml_bbl"   />
+          <field field_ref="tml_dmp"     name="tml_dmp"   />
+          <field field_ref="tml_npc"     name="tml_npc"   />
+          <field field_ref="sml"         name="sml"       />
+          <field field_ref="sml_tot"     name="sml_tot"   />
+          <field field_ref="sml_res"     name="sml_res"   />
+          <field field_ref="sml_xad"     name="sml_xad"   />
+          <field field_ref="sml_yad"     name="sml_yad"   />
+          <field field_ref="sml_zad"     name="sml_zad"   />
+          <field field_ref="sml_ldf"     name="sml_ldf"   />
+          <field field_ref="sml_for"     name="sml_for"   />
+          <field field_ref="sml_zdf"     name="sml_zdf"   />
+          <field field_ref="sml_bbc"     name="sml_bbc"   />
+          <field field_ref="sml_bbl"     name="sml_bbl"   />
+          <field field_ref="sml_dmp"     name="sml_dmp"   />
+          <field field_ref="sml_npc"     name="sml_npc"   />
+        </file>
 
       </file_group>
 
@@ -196,6 +225,9 @@
       <file_group id="2y"  output_freq="2y" output_level="10" enabled=".FALSE."/> <!-- real 2y files -->
       <file_group id="5y"  output_freq="5y" output_level="10" enabled=".FALSE."/> <!-- real 5y files -->
       <file_group id="10y" output_freq="10y" output_level="10" enabled=".FALSE."/> <!-- real 10y files -->
+
+      <!-- Activation of intermediate output for multiple-linear-regression analysis (diamlr) -->
+      <file_group id="diamlr_files" output_freq="1h"  output_level="10" enabled=".FALSE."/>
 
    </file_definition>
     
