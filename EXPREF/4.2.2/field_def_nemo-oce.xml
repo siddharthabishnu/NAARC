@@ -1198,42 +1198,103 @@ that are available in the tidal-forcing implementation (see
 
   <field_group id="trendU" grid_ref="grid_U_3D">
     <!-- variables available with ln_dyn_trd -->
-    <field id="utrd_hpg"       long_name="i-trend: hydrostatic pressure gradient"          unit="m/s^2"                        />
-    <field id="utrd_spg"       long_name="i-trend: surface     pressure gradient"          unit="m/s^2"                        />
-    <field id="utrd_spgexp"    long_name="i-trend: surface pressure gradient (explicit)"   unit="m/s^2"                        />
-    <field id="utrd_spgflt"    long_name="i-trend: surface pressure gradient (filtered)"   unit="m/s^2"                        />
-    <field id="utrd_keg"       long_name="i-trend: KE gradient         or hor. adv."       unit="m/s^2"                        />
-    <field id="utrd_rvo"       long_name="i-trend: relative  vorticity or metric term"     unit="m/s^2"                        />
-    <field id="utrd_pvo"       long_name="i-trend: planetary vorticity"                    unit="m/s^2"                        />
-    <field id="utrd_zad"       long_name="i-trend: vertical  advection"                    unit="m/s^2"                        />
-    <field id="utrd_udx"       long_name="i-trend: U.dx[U]"                                unit="m/s^2"                        />
-    <field id="utrd_ldf"       long_name="i-trend: lateral   diffusion"                    unit="m/s^2"                        />
-    <field id="utrd_zdf"       long_name="i-trend: vertical  diffusion"                    unit="m/s^2"                        />
-    <field id="utrd_tau"       long_name="i-trend: wind stress "                           unit="m/s^2"   grid_ref="grid_U_2D" />
-    <field id="utrd_bfr"       long_name="i-trend: bottom friction (explicit)"             unit="m/s^2"                        />
-    <field id="utrd_bfri"      long_name="i-trend: bottom friction (implicit)"             unit="m/s^2"                        />
-    <field id="utrd_tot"       long_name="i-trend: total momentum trend before atf"        unit="m/s^2"                        />
-    <field id="utrd_atf"       long_name="i-trend: asselin time filter trend"              unit="m/s^2"                        />
+    <field id="hu"             long_name="total time-varying depth at U-points"                    unit="m"      grid_ref="grid_U_2D"  />
+    <field id="utrd_hpg"       long_name="i-trend: hydrostatic pressure gradient"                  unit="m/s^2"                        />
+    <field id="utrd_spg2d"     long_name="i-trend: surface pressure gradient: true trend"          unit="m/s^2"  grid_ref="grid_U_2D"  />
+    <field id="utrd_keg"       long_name="i-trend: KE gradient         or hor. adv."               unit="m/s^2"                        />
+    <field id="utrd_rvo"       long_name="i-trend: relative  vorticity or metric term"             unit="m/s^2"                        />
+    <field id="utrd_pvo"       long_name="i-trend: planetary vorticity: 3D component"              unit="m/s^2"                        />
+    <field id="utrd_pvo2d"     long_name="i-trend: planetary vorticity: 2D component"              unit="m/s^2"  grid_ref="grid_U_2D"  />
+    <field id="utrd_zad"       long_name="i-trend: vertical  advection"                            unit="m/s^2"                        />
+    <field id="utrd_udx"       long_name="i-trend: U.dx[U]"                                        unit="m/s^2"                        />
+    <field id="utrd_ldf"       long_name="i-trend: lateral   diffusion"                            unit="m/s^2"                        />
+    <field id="utrd_zdf"       long_name="i-trend: vertical  diffusion"                            unit="m/s^2"                        />
+    <field id="utrd_frc2d"     long_name="i-trend: barotropic constant forcing "                   unit="m/s^2"  grid_ref="grid_U_2D"  />
+    <field id="utrd_tau"       long_name="i-trend: wind stress in top layer "                      unit="m/s^2"  grid_ref="grid_U_2D"  />
+    <field id="utrd_tau2d"     long_name="i-trend: wind stress: 2D component "                     unit="m/s^2"  grid_ref="grid_U_2D"  />
+    <field id="utrd_bfr"       long_name="i-trend: bottom friction (3D) in bottom layer"           unit="m/s^2"                        />
+    <field id="utrd_bfr2d"     long_name="i-trend: bottom friction: 2D component"                  unit="m/s^2"  grid_ref="grid_U_2D"  />
+    <field id="utrd_tfr"       long_name="i-trend: top friction (3D) in top layer"                 unit="m/s^2"                        />
+    <field id="utrd_tfr2d"     long_name="i-trend: top friction: 2D component"                     unit="m/s^2"  grid_ref="grid_U_2D"  />
+    <field id="utrd_tot"       long_name="i-trend: total momentum trend before atf"                unit="m/s^2"                        />
+    <field id="utrd_tot2d"     long_name="i-trend: total momentum trend before atf: 2D component"  unit="m/s^2"  grid_ref="grid_U_2D"  />
+    <field id="utrd_atf"       long_name="i-trend: asselin time filter trend"                      unit="m/s^2"                        />
+    <field id="utrd_atm2d"     long_name="i-trend: atmospheric pressure: 2D component "            unit="m/s^2"  grid_ref="grid_U_2D"  />  
+    <field id="utrd_bdy2d"     long_name="i-trend: lateral boundary forcing: 2D component "        unit="m/s^2"  grid_ref="grid_U_2D"  />
+    <field id="utrd_bdy"       long_name="i-trend: lateral boundary forcing "                      unit="m/s^2"                        />
+    <!-- thickness weighted versions -->
+    <field id="utrd_hpg_e3u"       unit="m2/s^2" > utrd_hpg * e3u </field>
+    <field id="utrd_spg_e3u"       unit="m2/s^2" > utrd_spg * e3u </field>
+    <field id="utrd_keg_e3u"       unit="m2/s^2" > utrd_keg * e3u </field>
+    <field id="utrd_rvo_e3u"       unit="m2/s^2" > utrd_rvo * e3u </field>
+    <field id="utrd_pvo_e3u"       unit="m2/s^2" > utrd_pvo * e3u </field>
+    <field id="utrd_zad_e3u"       unit="m2/s^2" > utrd_zad * e3u </field>
+    <field id="utrd_ldf_e3u"       unit="m2/s^2" > utrd_ldf * e3u </field>
+    <field id="utrd_zdf_e3u"       unit="m2/s^2" > utrd_zdf * e3u </field>
+    <field id="utrd_tot_e3u"       unit="m2/s^2" > utrd_tot * e3u </field>
+    <field id="utrd_atf_e3u"       unit="m2/s^2" > utrd_atf * e3u </field>
+    <field id="utrd_bta_e3u"       unit="m2/s^2" > utrd_bta * e3u </field>
+    <field id="utrd_bfr_e3u"       unit="m2/s^2" > utrd_bfr * e3u </field>
+    <field id="utrd_tfr_e3u"       unit="m2/s^2" > utrd_tfr * e3u </field>
+    <field id="utrd_spg2d_hu"      unit="m2/s^2" grid_ref="grid_U_2D" > utrd_spg2d * hu </field>
+    <field id="utrd_pvo2d_hu"      unit="m2/s^2" grid_ref="grid_U_2D" > utrd_pvo2d * hu </field>
+    <field id="utrd_frc2d_hu"      unit="m2/s^2" grid_ref="grid_U_2D" > utrd_frc2d * hu </field>
+    <field id="utrd_tau2d_hu"      unit="m2/s^2" grid_ref="grid_U_2D" > utrd_tau2d * hu </field>
+    <field id="utrd_tfr2d_hu"      unit="m2/s^2" grid_ref="grid_U_2D" > utrd_tfr2d * hu </field>
+    <field id="utrd_bfr2d_hu"      unit="m2/s^2" grid_ref="grid_U_2D" > utrd_bfr2d * hu </field>
+    <field id="utrd_tot2d_hu"      unit="m2/s^2" grid_ref="grid_U_2D" > utrd_tot2d * hu </field>
+    <field id="utrd_atm2d_hu"      unit="m2/s^2" grid_ref="grid_U_2D" > utrd_atm2d * hu </field>
   </field_group>
 
   <field_group id="trendV" grid_ref="grid_V_3D">
     <!-- variables available with ln_dyn_trd -->
-    <field id="vtrd_hpg"       long_name="j-trend: hydrostatic pressure gradient"          unit="m/s^2"                        />
-    <field id="vtrd_spg"       long_name="j-trend: surface     pressure gradient"          unit="m/s^2"                        />
-    <field id="vtrd_spgexp"    long_name="j-trend: surface pressure gradient (explicit)"   unit="m/s^2"                        />
-    <field id="vtrd_spgflt"    long_name="j-trend: surface pressure gradient (filtered)"   unit="m/s^2"                        />
-    <field id="vtrd_keg"       long_name="j-trend: KE gradient         or hor. adv."       unit="m/s^2"                        />
-    <field id="vtrd_rvo"       long_name="j-trend: relative  vorticity or metric term"     unit="m/s^2"                        />
-    <field id="vtrd_pvo"       long_name="j-trend: planetary vorticity"                    unit="m/s^2"                        />
-    <field id="vtrd_zad"       long_name="j-trend: vertical  advection"                    unit="m/s^2"                        />
-    <field id="vtrd_vdy"       long_name="i-trend: V.dx[V]"                                unit="m/s^2"                        />
-    <field id="vtrd_ldf"       long_name="j-trend: lateral   diffusion"                    unit="m/s^2"                        />
-    <field id="vtrd_zdf"       long_name="j-trend: vertical  diffusion"                    unit="m/s^2"                        />
-    <field id="vtrd_tau"       long_name="j-trend: wind stress "                           unit="m/s^2"   grid_ref="grid_V_2D" />
-    <field id="vtrd_bfr"       long_name="j-trend: bottom friction (explicit)"             unit="m/s^2"                        />
-    <field id="vtrd_bfri"      long_name="j-trend: bottom friction (implicit)"             unit="m/s^2"                        />
-    <field id="vtrd_tot"       long_name="j-trend: total momentum trend before atf"        unit="m/s^2"                        />
-    <field id="vtrd_atf"       long_name="j-trend: asselin time filter trend"              unit="m/s^2"                        />
+    <field id="hv"             long_name="total time-varying depth at V-points"                    unit="m"      grid_ref="grid_V_2D"  />
+    <field id="vtrd_hpg"       long_name="j-trend: hydrostatic pressure gradient"                  unit="m/s^2"                        />
+    <field id="vtrd_spg"       long_name="j-trend: surface     pressure gradient"                  unit="m/s^2"                        />
+    <field id="vtrd_spg2d"     long_name="j-trend: surface pressure gradient: true trend"          unit="m/s^2"  grid_ref="grid_V_2D"  />
+    <field id="vtrd_keg"       long_name="j-trend: KE gradient         or hor. adv."               unit="m/s^2"                        />
+    <field id="vtrd_rvo"       long_name="j-trend: relative  vorticity or metric term"             unit="m/s^2"                        />
+    <field id="vtrd_pvo"       long_name="j-trend: planetary vorticity: 3D component"              unit="m/s^2"                        />
+    <field id="vtrd_pvo2d"     long_name="j-trend: planetary vorticity: 2D component"              unit="m/s^2"  grid_ref="grid_V_2D"  />
+    <field id="vtrd_zad"       long_name="j-trend: vertical  advection"                            unit="m/s^2"                        />
+    <field id="vtrd_vdy"       long_name="j-trend: V.dx[V]"                                        unit="m/s^2"                        />
+    <field id="vtrd_ldf"       long_name="j-trend: lateral   diffusion"                            unit="m/s^2"                        />
+    <field id="vtrd_zdf"       long_name="j-trend: vertical  diffusion"                            unit="m/s^2"                        />
+    <field id="vtrd_frc2d"     long_name="j-trend: barotropic constant forcing "                   unit="m/s^2"  grid_ref="grid_V_2D"  />
+    <field id="vtrd_tau"       long_name="j-trend: wind stress in top layer "                      unit="m/s^2"  grid_ref="grid_V_2D"  />
+    <field id="vtrd_tau2d"     long_name="j-trend: wind stress: 2D component "                     unit="m/s^2"  grid_ref="grid_V_2D"  />
+    <field id="vtrd_bfr"       long_name="j-trend: bottom friction (3D) in bottom layer"           unit="m/s^2"                        />
+    <field id="vtrd_bfr2d"     long_name="j-trend: bottom friction: 2D component"                  unit="m/s^2"  grid_ref="grid_V_2D"  />
+    <field id="vtrd_tfr"       long_name="j-trend: top friction (3D) in top layer"                 unit="m/s^2"                        />
+    <field id="vtrd_tfr2d"     long_name="j-trend: top friction: 2D component"                     unit="m/s^2"  grid_ref="grid_V_2D"  />
+    <field id="vtrd_tot"       long_name="j-trend: total momentum trend before atf"                unit="m/s^2"                        />
+    <field id="vtrd_tot2d"     long_name="j-trend: total momentum trend before atf: 2D component"  unit="m/s^2"  grid_ref="grid_V_2D"  />
+    <field id="vtrd_atf"       long_name="j-trend: asselin time filter trend"                      unit="m/s^2"                        />
+    <field id="vtrd_atm2d"     long_name="j-trend: atmospheric pressure: 2D component "            unit="m/s^2"  grid_ref="grid_V_2D"  />
+    <field id="vtrd_bdy2d"     long_name="j-trend: lateral boundary forcing: 2D component "        unit="m/s^2"  grid_ref="grid_V_2D"  />
+    <field id="vtrd_bdy"       long_name="j-trend: lateral boundary forcing "                      unit="m/s^2"                        />
+    <!-- thickness weighted versions -->
+    <field id="vtrd_hpg_e3v"       unit="m2/s^2" > vtrd_hpg * e3v </field>
+    <field id="vtrd_spg_e3v"       unit="m2/s^2" > vtrd_spg * e3v </field>
+    <field id="vtrd_keg_e3v"       unit="m2/s^2" > vtrd_keg * e3v </field>
+    <field id="vtrd_rvo_e3v"       unit="m2/s^2" > vtrd_rvo * e3v </field>
+    <field id="vtrd_pvo_e3v"       unit="m2/s^2" > vtrd_pvo * e3v </field>
+    <field id="vtrd_zad_e3v"       unit="m2/s^2" > vtrd_zad * e3v </field>
+    <field id="vtrd_ldf_e3v"       unit="m2/s^2" > vtrd_ldf * e3v </field>
+    <field id="vtrd_zdf_e3v"       unit="m2/s^2" > vtrd_zdf * e3v </field>
+    <field id="vtrd_tot_e3v"       unit="m2/s^2" > vtrd_tot * e3v </field>
+    <field id="vtrd_atf_e3v"       unit="m2/s^2" > vtrd_atf * e3v </field>
+    <field id="vtrd_bta_e3v"       unit="m2/s^2" > vtrd_bta * e3v </field>
+    <field id="vtrd_bfr_e3v"       unit="m2/s^2" > vtrd_bfr * e3v </field>
+    <field id="vtrd_tfr_e3v"       unit="m2/s^2" > vtrd_tfr * e3v </field>
+    <field id="vtrd_spg2d_hv"      unit="m2/s^2" grid_ref="grid_V_2D" > vtrd_spg2d * hv </field>
+    <field id="vtrd_pvo2d_hv"      unit="m2/s^2" grid_ref="grid_V_2D" > vtrd_pvo2d * hv </field>
+    <field id="vtrd_frc2d_hv"      unit="m2/s^2" grid_ref="grid_V_2D" > vtrd_frc2d * hv </field>
+    <field id="vtrd_tau2d_hv"      unit="m2/s^2" grid_ref="grid_V_2D" > vtrd_tau2d * hv </field>
+    <field id="vtrd_tfr2d_hv"      unit="m2/s^2" grid_ref="grid_V_2D" > vtrd_tfr2d * hv </field>
+    <field id="vtrd_bfr2d_hv"      unit="m2/s^2" grid_ref="grid_V_2D" > vtrd_bfr2d * hv </field>
+    <field id="vtrd_tot2d_hv"      unit="m2/s^2" grid_ref="grid_V_2D" > vtrd_tot2d * hv </field>
+    <field id="vtrd_atm2d_hv"      unit="m2/s^2" grid_ref="grid_V_2D" > vtrd_atm2d * hv </field>
   </field_group>
 
   <field_group id="DCT"  grid_ref="grid_allstraits" >
