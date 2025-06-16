@@ -23,8 +23,8 @@ MODULE trd_oce
    LOGICAL , PUBLIC  ::   ln_tra_mxl   = .FALSE.        !: (T) 2D momentum trends averaged over the mixed layer 
    INTEGER , PUBLIC  ::   nn_trd       = 10             !: time step frequency for ln_glo_trd=T only
 
-   LOGICAL , PUBLIC ::   l_trdtra        !: tracers  trend flag (set from namelist in trdini)
-   LOGICAL , PUBLIC ::   l_trddyn        !: momentum trend flag (set from namelist in trdini)
+   LOGICAL , PUBLIC ::   l_trdtra = .FALSE.        !: tracers  trend flag (set from namelist in trdini)
+   LOGICAL , PUBLIC ::   l_trddyn = .FALSE.        !: momentum trend flag (set from namelist in trdini)
    
 # if ( defined key_trdtrc && defined key_xios )  ||  defined key_trdmxl_trc
    LOGICAL , PUBLIC ::   l_trdtrc = .TRUE.        !: tracers  trend flag

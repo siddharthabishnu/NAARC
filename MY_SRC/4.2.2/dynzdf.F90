@@ -103,6 +103,7 @@ CONTAINS
       !                             !* explicit top/bottom drag case
       IF( .NOT.ln_drgimp )   CALL zdf_drg_exp( kt, Kmm, puu(:,:,:,Kbb), pvv(:,:,:,Kbb), puu(:,:,:,Krhs), pvv(:,:,:,Krhs) )  ! add top/bottom friction trend to (puu(Kaa),pvv(Kaa))
       !
+      !
       !              !==  RHS: Leap-Frog time stepping on all trends but the vertical mixing  ==!   (put in puu(:,:,:,Kaa),pvv(:,:,:,Kaa))
       !
       !                    ! time stepping except vertical diffusion
@@ -465,24 +466,23 @@ CONTAINS
          ztrdv(:,:,:) = ( pvv(:,:,:,Kaa) - ztrdv(:,:,:) ) * r1_Dt 
          CALL trd_dyn( ztrdu, ztrdv, jpdyn_zdf, kt, Kmm, Kaa )
          !
+         ztrdu_fr(:,:,:) = 0._wp    ;   ztrdv_fr(:,:,:) = 0._wp
          IF( nn_ice == 2 ) THEN
             !                             ! trends due to ice-ocean drag in surface layer
-            ztrdu_fr(:,:,:) = 0._wp    ;   ztrdv_fr(:,:,:) = 0._wp
             ztrdu_fr(:,:,1) = ( uiceoc_b(:,:) + uiceoc(:,:) ) / ( e3u(:,:,1,Kmm) * rho0 )
             ztrdv_fr(:,:,1) = ( viceoc_b(:,:) + viceoc(:,:) ) / ( e3v(:,:,1,Kmm) * rho0 )
             CALL trd_dyn( ztrdu_fr(:,:,1), ztrdv_fr(:,:,1), jpdyn_iceoc, kt, Kmm )
          ENDIF
          !
          !                             ! wind stress trends in surface layer
-         ztrdu_fr(:,:,:) = 0._wp    ;   ztrdv_fr(:,:,:) = 0._wp
          ztrdu_fr(:,:,1) = ( utau_b(:,:) + utau(:,:) ) / ( e3u(:,:,1,Kmm) * rho0 )
          ztrdv_fr(:,:,1) = ( vtau_b(:,:) + vtau(:,:) ) / ( e3v(:,:,1,Kmm) * rho0 )
          CALL trd_dyn( ztrdu_fr(:,:,1), ztrdv_fr(:,:,1), jpdyn_tau, kt, Kmm)
          !
          IF( ln_drgimp ) THEN
             !                          ! trends due to implicit bottom friction
-            ztrdu_fr(:,:,:) = 0._wp    ;   ztrdv_fr(:,:,:) = 0._wp
-            DO_2D( 1, 1, 1, 1 )
+            ztrdu_fr(:,:,1) = 0._wp    ;   ztrdv_fr(:,:,1) = 0._wp
+            DO_2D( 0, 0, 0, 0 )
                iku = mbku(ji,jj)          ! deepest ocean u- & v-levels
                ikv = mbkv(ji,jj)
                ztrdu_fr(ji,jj,iku) = 0.5 * ( rCdU_bot(ji+1,jj) + rCdU_bot(ji,jj) )  &
@@ -494,7 +494,7 @@ CONTAINS
             !                          ! trends due to implicit top friction
             IF( ln_isfcav.OR.ln_drgice_imp ) THEN    ! Ocean cavities (ISF) or implicit ice-ocean drag
                ztrdu_fr(:,:,:) = 0._wp    ;   ztrdv_fr(:,:,:) = 0._wp
-               DO_2D( 1, 1, 1, 1 ) 
+               DO_2D( 0, 0, 0, 0 )
                   iku = miku(ji,jj)       ! ocean top level at u-points
                   ikv = mikv(ji,jj)       ! ocean top level at v-points
                   ztrdu_fr(ji,jj,iku) = 0.5 * ( rCdU_top(ji+1,jj) + rCdU_top(ji,jj) )  &
@@ -506,7 +506,7 @@ CONTAINS
             ENDIF
          ENDIF
          !
-         DEALLOCATE( ztrdu, ztrdv, ztrdu_fr, ztrdv_fr )
+         DEALLOCATE( ztrdu, ztrdv, ztrdu_fr, ztrdv_fr ) 
       ENDIF
       !                                          ! print mean trends (used for debugging)
       IF(sn_cfctl%l_prtctl)   CALL prt_ctl( tab3d_1=puu(:,:,:,Kaa), clinfo1=' zdf  - Ua: ', mask1=umask,               &

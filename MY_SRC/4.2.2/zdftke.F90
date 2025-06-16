@@ -96,7 +96,7 @@ MODULE zdftke
    REAL(wp) ::   rhftau_add = 1.e-3_wp     ! add offset   applied to HF part of taum  (nn_etau=3)
    REAL(wp) ::   rhftau_scl = 1.0_wp       ! scale factor applied to HF part of taum  (nn_etau=3)
 
-   REAL(wp), ALLOCATABLE, SAVE, DIMENSION(:,:)   ::   htau    ! depth of tke penetration (nn_htau)
+   REAL(wp), ALLOCATABLE, SAVE, PUBLIC, DIMENSION(:,:)   ::   htau    ! depth of tke penetration (nn_htau)
    REAL(wp), ALLOCATABLE, SAVE, DIMENSION(:,:,:) ::   dissl   ! now mixing lenght of dissipation
    REAL(wp), ALLOCATABLE, SAVE, DIMENSION(:,:,:) ::   apdlr   ! now mixing lenght of dissipation
 

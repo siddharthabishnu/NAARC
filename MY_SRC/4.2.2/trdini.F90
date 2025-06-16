@@ -79,10 +79,11 @@ CONTAINS
       IF ( ln_dyn_trd .OR. ln_KE_trd .OR. ln_dyn_mxl .OR.   &
          & ln_vor_trd .OR. ln_glo_trd                       )   l_trddyn = .TRUE.
       !
+
       ! Allocate (partial) ice-ocean stresses (only used for dynamics trends diagnostics). 
       IF( l_trddyn .and. nn_ice == 2 ) ALLOCATE( uiceoc(jpi,jpj), uiceoc_b(jpi,jpj), &
                                                  viceoc(jpi,jpj), viceoc_b(jpi,jpj) )
-      !
+
 !!gm check the stop below
       IF( ln_dyn_mxl )   CALL ctl_stop( 'ML diag on momentum are not yet coded we stop' )
       !
@@ -91,7 +92,6 @@ CONTAINS
       IF( ln_tra_mxl .OR. ln_vor_trd )   CALL ctl_stop( 'ML tracer and Barotropic vorticity diags are still using old IOIPSL' )
 !!gm end
       !
-!      IF( .NOT.ln_linssh .AND. ( l_trdtra .OR. l_trddyn ) )  CALL ctl_stop( 'trend diagnostics with variable volume not validated' )
 
       IF( ln_tile .AND. ( l_trdtra .OR. l_trddyn ) ) THEN
          CALL ctl_warn('Tiling is not yet implemented for the trends diagnostics; ln_tile is forced to FALSE')
@@ -99,6 +99,8 @@ CONTAINS
          CALL dom_tile_init
       ENDIF
 
+!!RDP : The below comments are potentially outdated. It is thought that flux form is now also permissable.
+!!RDP : Though, this needs to be verified.
 !!gm  : Potential BUG : 3D output only for vector invariant form!  add a ctl_stop or code the flux form case
 !!gm  : bug/pb for vertical advection of tracer in vvl case: add T.dt[eta] in the output...
 

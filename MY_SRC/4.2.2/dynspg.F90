@@ -56,7 +56,7 @@ MODULE dynspg
    !!----------------------------------------------------------------------
 CONTAINS
 
-   SUBROUTINE dyn_spg( kt, Kbb, Kmm, Krhs, puu, pvv, pssh, puu_b, pvv_b, Kaa, k_only_ADV )
+   SUBROUTINE dyn_spg( kt, Kbb, Kmm, Krhs, puu, pvv, pssh, puu_b, pvv_b, Kaa )
       !!----------------------------------------------------------------------
       !!                  ***  ROUTINE dyn_spg  ***
       !!
@@ -79,7 +79,6 @@ CONTAINS
       REAL(dp), DIMENSION(jpi,jpj,jpk,jpt), INTENT(inout) ::  puu, pvv            ! ocean velocities and RHS of momentum equation
       REAL(wp), DIMENSION(jpi,jpj,jpt)    , INTENT(inout)  :: puu_b, pvv_b! SSH and barotropic velocities at main time levels
       REAL(dp), DIMENSION(jpi,jpj,jpt)    , INTENT(inout)  :: pssh! SSH and barotropic velocities at main time levels
-      INTEGER , OPTIONAL                  , INTENT( in )  ::  k_only_ADV          ! only Advection in the RHS
       !
       INTEGER  ::   ji, jj, jk                   ! dummy loop indices
       REAL(wp) ::   z2dt, zg_2, zintp, zgrho0r, zld   ! local scalars
@@ -167,7 +166,7 @@ CONTAINS
       !
       SELECT CASE ( nspg )                   !== surface pressure gradient computed and add to the general trend ==!
       CASE ( np_EXP )   ;   CALL dyn_spg_exp( kt,      Kmm,       puu, pvv, Krhs )                    ! explicit
-      CASE ( np_TS  )   ;   CALL dyn_spg_ts ( kt, Kbb, Kmm, Krhs, puu, pvv, pssh, puu_b, pvv_b, Kaa, k_only_ADV ) ! time-splitting
+      CASE ( np_TS  )   ;   CALL dyn_spg_ts ( kt, Kbb, Kmm, Krhs, puu, pvv, pssh, puu_b, pvv_b, Kaa ) ! time-splitting
       END SELECT
       !
       IF( l_trddyn .AND. nspg == np_EXP )   THEN                  ! save the surface pressure gradient trends for further diagnostics

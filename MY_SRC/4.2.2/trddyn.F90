@@ -74,10 +74,11 @@ CONTAINS
       REAL(dp), DIMENSION(:,:,:), INTENT(inout)           ::   putrd, pvtrd   ! U and V trends 
       INTEGER                   , INTENT(in   )           ::   ktrd           ! trend index
       INTEGER                   , INTENT(in   )           ::   kt             ! time step
-      REAL(wp), ALLOCATABLE, DIMENSION(:,:)               ::   sue, sve       ! temporary 2D arrays
-      INTEGER                                             ::   jk
       INTEGER                   , INTENT(in   ), OPTIONAL ::   Kmm            ! time level index
       INTEGER                   , INTENT(in   ), OPTIONAL ::   Kaa            ! time level index
+      !
+      REAL(wp), ALLOCATABLE, DIMENSION(:,:) ::   zue, zve                     ! temporary 2D arrays
+      INTEGER  ::   ji, jj, jk                                                ! dummy loop indices
       !!----------------------------------------------------------------------
       !
       putrd(:,:,:) = putrd(:,:,:) * umask(:,:,:)                       ! mask the trends
@@ -108,7 +109,7 @@ CONTAINS
          CALL trd_dyn_iom_2d( putrd(:,:,1), pvtrd(:,:,1), jpdyn_spg, kt ) 
          sutrd_hpg(:,:,:) = sutrd_hpg(:,:,:) + putrd(:,:,:)  
          svtrd_hpg(:,:,:) = svtrd_hpg(:,:,:) + pvtrd(:,:,:)  
-         CALL trd_dyn_iom_3d( svtrd_hpg, svtrd_hpg, jpdyn_hpg, kt, Kmm ) 
+         CALL trd_dyn_iom_3d( svtrd_hpg, svtrd_hpg, jpdyn_hpg, kt ) 
          DEALLOCATE( sutrd_hpg, svtrd_hpg )
 
       CASE( jpdyn_tfre )
@@ -122,8 +123,8 @@ CONTAINS
          ENDIF
          IF( .NOT. ALLOCATED(sutrd_tfr) ) THEN 
             ALLOCATE( sutrd_tfr(jpi,jpj,jpk), svtrd_tfr(jpi,jpj,jpk) )
-            sutrd_tfr(:,:,:) = 0.0
-            svtrd_tfr(:,:,:) = 0.0
+            sutrd_tfr(:,:,:) = 0.0_wp
+            svtrd_tfr(:,:,:) = 0.0_wp
          ENDIF
          sutrd_tfr(:,:,:) = sutrd_tfr(:,:,:) + putrd(:,:,:) 
          svtrd_tfr(:,:,:) = svtrd_tfr(:,:,:) + pvtrd(:,:,:)
@@ -134,8 +135,8 @@ CONTAINS
          ! Any depth-mean component removed later when TFR trend written out. 
          IF( .NOT. ALLOCATED(sutrd_tfr) ) THEN 
             ALLOCATE( sutrd_tfr(jpi,jpj,jpk), svtrd_tfr(jpi,jpj,jpk) )
-            sutrd_tfr(:,:,:) = 0.0
-            svtrd_tfr(:,:,:) = 0.0
+            sutrd_tfr(:,:,:) = 0.0_wp
+            svtrd_tfr(:,:,:) = 0.0_wp
          ENDIF
          sutrd_tfr(:,:,:) = sutrd_tfr(:,:,:) + putrd(:,:,:) 
          svtrd_tfr(:,:,:) = svtrd_tfr(:,:,:) + pvtrd(:,:,:)
@@ -151,8 +152,8 @@ CONTAINS
          ENDIF
          IF( .NOT. ALLOCATED(sutrd_bfr) ) THEN 
             ALLOCATE( sutrd_bfr(jpi,jpj,jpk), svtrd_bfr(jpi,jpj,jpk) )
-            sutrd_bfr(:,:,:) = 0.0
-            svtrd_bfr(:,:,:) = 0.0
+            sutrd_bfr(:,:,:) = 0.0_wp
+            svtrd_bfr(:,:,:) = 0.0_wp
          ENDIF
          sutrd_bfr(:,:,:) = sutrd_bfr(:,:,:) + putrd(:,:,:) 
          svtrd_bfr(:,:,:) = svtrd_bfr(:,:,:) + pvtrd(:,:,:)
@@ -163,8 +164,8 @@ CONTAINS
          ! Any depth-mean component removed later when BFR trend written out. 
          IF( .NOT. ALLOCATED(sutrd_bfr) ) THEN 
             ALLOCATE( sutrd_bfr(jpi,jpj,jpk), svtrd_bfr(jpi,jpj,jpk) )
-            sutrd_bfr(:,:,:) = 0.0
-            svtrd_bfr(:,:,:) = 0.0
+            sutrd_bfr(:,:,:) = 0.0_wp
+            svtrd_bfr(:,:,:) = 0.0_wp
          ENDIF
          sutrd_bfr(:,:,:) = sutrd_bfr(:,:,:) + putrd(:,:,:) 
          svtrd_bfr(:,:,:) = svtrd_bfr(:,:,:) + pvtrd(:,:,:)
@@ -190,18 +191,22 @@ CONTAINS
             DEALLOCATE( sutrd_bfre, svtrd_bfre )
          ENDIF
          IF( ln_dynspg_ts ) THEN
-            ALLOCATE( sue(jpi,jpj), sve(jpi,jpj) )
-            sue(:,:) = e3u(:,:,1,Kaa) * putrd(:,:,1) * umask(:,:,1)
-            sve(:,:) = e3v(:,:,1,Kaa) * pvtrd(:,:,1) * vmask(:,:,1)
-            DO jk = 2, jpkm1
-               sue(:,:) = sue(:,:) + e3u(:,:,jk,Kaa) * putrd(:,:,jk) * umask(:,:,jk)
-               sve(:,:) = sve(:,:) + e3v(:,:,jk,Kaa) * pvtrd(:,:,jk) * vmask(:,:,jk)
-            END DO
-            DO jk = 1, jpkm1
-               putrd(:,:,jk) = ( sutrd_tau2d(:,:) + sutrd_bfr2d(:,:) + putrd(:,:,jk) - sue(:,:) * r1_hu(:,:,Kaa) ) * umask(:,:,jk)
-               pvtrd(:,:,jk) = ( svtrd_tau2d(:,:) + svtrd_bfr2d(:,:) + pvtrd(:,:,jk) - sve(:,:) * r1_hv(:,:,Kaa) ) * vmask(:,:,jk)
-            END DO
-            DEALLOCATE( sue, sve, sutrd_tau2d, svtrd_tau2d, sutrd_bfr2d, svtrd_bfr2d)
+            ALLOCATE( zue(A2D(0)), zve(A2D(0)) )
+            DO_2D( 0, 0, 0, 0 )
+               zue(ji,jj) = e3u(ji,jj,1,Kaa) * putrd(ji,jj,1) * umask(ji,jj,1)
+               zve(ji,jj) = e3v(ji,jj,1,Kaa) * pvtrd(ji,jj,1) * vmask(ji,jj,1)
+            END_2D
+            DO_3D( 0, 0, 0, 0, 2, jpkm1 )
+               zue(ji,jj) = zue(ji,jj) + e3u(ji,jj,jk,Kaa) * putrd(ji,jj,jk) * umask(ji,jj,jk)
+               zve(ji,jj) = zve(ji,jj) + e3v(ji,jj,jk,Kaa) * pvtrd(ji,jj,jk) * vmask(ji,jj,jk)
+            END_3D
+            DO_3D( 0, 0, 0, 0, 1, jpkm1 )
+               putrd(ji,jj,jk) = ( sutrd_tau2d(ji,jj) + sutrd_bfr2d(ji,jj) + putrd(ji,jj,jk) - &
+                  &                zue(ji,jj) * r1_hu(ji,jj,Kaa) ) * umask(ji,jj,jk)
+               pvtrd(ji,jj,jk) = ( svtrd_tau2d(ji,jj) + svtrd_bfr2d(ji,jj) + pvtrd(ji,jj,jk) - &
+                  &                zve(ji,jj) * r1_hv(ji,jj,Kaa) ) * vmask(ji,jj,jk)
+            END_3D
+            DEALLOCATE( zue, zve, sutrd_tau2d, svtrd_tau2d, sutrd_bfr2d, svtrd_bfr2d)
             IF( ALLOCATED( sutrd_tfr2d ) ) THEN
                DO jk = 1, jpkm1
                   putrd(:,:,jk) = ( putrd(:,:,jk) + sutrd_tfr2d(:,:) ) * umask(:,:,jk)
@@ -230,8 +235,8 @@ CONTAINS
             ! is initialised here.
             IF( .NOT. ALLOCATED( sutrd_tfr ) ) THEN
                ALLOCATE( sutrd_tfr(jpi,jpj,jpk), svtrd_tfr(jpi,jpj,jpk) )
-               sutrd_tfr(:,:,:) = 0.0
-               svtrd_tfr(:,:,:) = 0.0
+               sutrd_tfr(:,:,:) = 0.0_wp
+               svtrd_tfr(:,:,:) = 0.0_wp
             ENDIF   
             IF( ALLOCATED( sutrd_iceoc ) ) THEN
                ! Add trend due to ice-ocean stress at the surface
@@ -239,36 +244,38 @@ CONTAINS
                svtrd_tfr(:,:,1) = svtrd_tfr(:,:,1) + svtrd_iceoc(:,:)
                DEALLOCATE( sutrd_iceoc, svtrd_iceoc )
             ENDIF
-            ALLOCATE( sue(jpi,jpj), sve(jpi,jpj) )
-            sue(:,:) = e3u(:,:,1,Kaa) * sutrd_tfr(:,:,1) * umask(:,:,1)
-            sve(:,:) = e3v(:,:,1,Kaa) * svtrd_tfr(:,:,1) * vmask(:,:,1)
-            DO jk = 2, jpkm1
-               sue(:,:) = sue(:,:) + e3u(:,:,jk,Kaa) * sutrd_tfr(:,:,jk) * umask(:,:,jk)
-               sve(:,:) = sve(:,:) + e3v(:,:,jk,Kaa) * svtrd_tfr(:,:,jk) * vmask(:,:,jk)
-            END DO
-            DO jk = 1, jpkm1
-               sutrd_tfr(:,:,jk) = ( sutrd_tfr(:,:,jk) - sue(:,:) * r1_hu(:,:,Kaa) ) * umask(:,:,jk)
-               svtrd_tfr(:,:,jk) = ( svtrd_tfr(:,:,jk) - sve(:,:) * r1_hv(:,:,Kaa) ) * vmask(:,:,jk)
-            END DO
-            ! RDP should this be Kaa ?
-            CALL trd_dyn_iom_3d( sutrd_tfr, svtrd_tfr, jpdyn_tfr, kt, Kmm )
-            DEALLOCATE( sue, sve, sutrd_tfr, svtrd_tfr )
+            ALLOCATE( zue(A2D(0)), zve(A2D(0)) )
+            DO_2D( 0, 0, 0, 0 )
+               zue(ji,jj) = e3u(ji,jj,1,Kaa) * sutrd_tfr(ji,jj,1) * umask(ji,jj,1)
+               zve(ji,jj) = e3v(ji,jj,1,Kaa) * svtrd_tfr(ji,jj,1) * vmask(ji,jj,1)
+            END_2D
+            DO_3D( 0, 0, 0, 0, 2, jpkm1 )
+               zue(ji,jj) = zue(ji,jj) + e3u(ji,jj,jk,Kaa) * sutrd_tfr(ji,jj,jk) * umask(ji,jj,jk)
+               zve(ji,jj) = zve(ji,jj) + e3v(ji,jj,jk,Kaa) * svtrd_tfr(ji,jj,jk) * vmask(ji,jj,jk)
+            END_3D
+            DO_3D( 0, 0, 0, 0, 1, jpkm1 )
+               sutrd_tfr(ji,jj,jk) = ( sutrd_tfr(ji,jj,jk) - zue(ji,jj) * r1_hu(ji,jj,Kaa) ) * umask(ji,jj,jk)
+               svtrd_tfr(ji,jj,jk) = ( svtrd_tfr(ji,jj,jk) - zve(ji,jj) * r1_hv(ji,jj,Kaa) ) * vmask(ji,jj,jk)
+            END_3D
+            CALL trd_dyn_iom_3d( sutrd_tfr, svtrd_tfr, jpdyn_tfr, kt )
+            DEALLOCATE( zue, zve, sutrd_tfr, svtrd_tfr )
          ENDIF
          IF( ALLOCATED( sutrd_bfr ) ) THEN
-            ALLOCATE( sue(jpi,jpj), sve(jpi,jpj) )
-            sue(:,:) = e3u(:,:,1,Kaa) * sutrd_bfr(:,:,1) * umask(:,:,1)
-            sve(:,:) = e3v(:,:,1,Kaa) * svtrd_bfr(:,:,1) * vmask(:,:,1)
-            DO jk = 2, jpkm1
-               sue(:,:) = sue(:,:) + e3u(:,:,jk,Kaa) * sutrd_bfr(:,:,jk) * umask(:,:,jk)
-               sve(:,:) = sve(:,:) + e3v(:,:,jk,Kaa) * svtrd_bfr(:,:,jk) * vmask(:,:,jk)
-            END DO
-            DO jk = 1, jpkm1
-               sutrd_bfr(:,:,jk) = ( sutrd_bfr(:,:,jk) - sue(:,:) * r1_hu(:,:,Kaa) ) * umask(:,:,jk)
-               svtrd_bfr(:,:,jk) = ( svtrd_bfr(:,:,jk) - sve(:,:) * r1_hv(:,:,Kaa) ) * vmask(:,:,jk)
-            END DO
-            ! RDP should this be Kaa ?
-            CALL trd_dyn_iom_3d( sutrd_bfr, svtrd_bfr, jpdyn_bfr, kt, Kmm )
-            DEALLOCATE( sue, sve, sutrd_bfr, svtrd_bfr )
+            ALLOCATE( zue(A2D(0)), zve(A2D(0)) )
+            DO_2D( 0, 0, 0, 0 )
+               zue(ji,jj) = e3u(ji,jj,1,Kaa) * sutrd_bfr(ji,jj,1) * umask(ji,jj,1)
+               zve(ji,jj) = e3v(ji,jj,1,Kaa) * svtrd_bfr(ji,jj,1) * vmask(ji,jj,1)
+            END_2D
+            DO_3D( 0, 0, 0, 0, 2, jpkm1 )
+               zue(ji,jj) = zue(ji,jj) + e3u(ji,jj,jk,Kaa) * sutrd_bfr(ji,jj,jk) * umask(ji,jj,jk)
+               zve(ji,jj) = zve(ji,jj) + e3v(ji,jj,jk,Kaa) * svtrd_bfr(ji,jj,jk) * vmask(ji,jj,jk)
+            END_3D
+            DO_3D( 0, 0, 0, 0, 1, jpkm1 )
+               sutrd_bfr(ji,jj,jk) = ( sutrd_bfr(ji,jj,jk) - zue(ji,jj) * r1_hu(ji,jj,Kaa) ) * umask(ji,jj,jk)
+               svtrd_bfr(ji,jj,jk) = ( svtrd_bfr(ji,jj,jk) - zve(ji,jj) * r1_hv(ji,jj,Kaa) ) * vmask(ji,jj,jk)
+            END_3D
+            CALL trd_dyn_iom_3d( sutrd_bfr, svtrd_bfr, jpdyn_bfr, kt )
+            DEALLOCATE( zue, zve, sutrd_bfr, svtrd_bfr )
          ENDIF
 
       END SELECT
@@ -486,8 +493,6 @@ CONTAINS
       INTEGER                   , INTENT(in   ), OPTIONAL ::   Kmm            ! time level index
       !
       INTEGER ::   ji, jj, jk   ! dummy loop indices
-      INTEGER ::   ikbu, ikbv   ! local integers
-      REAL(wp), ALLOCATABLE, DIMENSION(:,:)   ::   z2dx, z2dy   ! 2D workspace 
       REAL(wp), ALLOCATABLE, DIMENSION(:,:,:) ::   z3dx, z3dy   ! 3D workspace 
       !!----------------------------------------------------------------------
       !
@@ -543,9 +548,6 @@ CONTAINS
       INTEGER                 , INTENT(in   ) ::   kt             ! time step
       !
       INTEGER ::   ji, jj, jk   ! dummy loop indices
-      INTEGER ::   ikbu, ikbv   ! local integers
-      REAL(wp), ALLOCATABLE, DIMENSION(:,:)   ::   z2dx, z2dy   ! 2D workspace 
-      REAL(wp), ALLOCATABLE, DIMENSION(:,:,:) ::   z3dx, z3dy   ! 3D workspace 
       !!----------------------------------------------------------------------
       !
       SELECT CASE( ktrd )
