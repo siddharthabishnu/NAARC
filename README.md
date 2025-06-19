@@ -1,6 +1,9 @@
 # North Atlantic and ARCtic NEMO configuration
 
-The setup script has been tested and will checkout, compile and run the NAARC (NEMO 4.2.2) code on: ARCHER2 for Cray-MPICH and GNU-MPICH, and Anemone for iFort. 
+The setup script has been tested and will checkout, compile and run the NAARC (NEMO 4.2.2) code on: ARCHER2 for Cray-MPICH and GNU-MPICH, and Anemone for iFort.
+
+
+<img width="541" alt="Screenshot 2025-06-19 at 16 40 30" src="https://github.com/user-attachments/assets/1c681919-c59d-4750-a92e-9e0b9a0d5411" />
 
 [Documentation](https://noc-msm.github.io/NAARC/)
 
