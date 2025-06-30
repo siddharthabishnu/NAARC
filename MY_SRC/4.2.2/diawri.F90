@@ -47,6 +47,7 @@ MODULE diawri
    USE zdfdrg         ! ocean vertical physics: top/bottom friction
    USE zdfmxl         ! mixed layer
    USE zdfosm         ! mixed layer
+   USE zdftke  , ONLY: htau
    !
    USE lbclnk         ! ocean lateral boundary conditions (or mpp link)
    USE in_out_manager ! I/O manager
@@ -129,6 +130,8 @@ CONTAINS
       CHARACTER(len=4),SAVE :: ttype , stype           ! temperature and salinity type
       !!----------------------------------------------------------------------
       ! 
+      IF( ln_timing )   CALL timing_start('dia_wri')
+      !
       IF( kt == nit000 ) THEN
          IF( ln_TEOS10 ) THEN
             IF ( iom_use("toce_pot") .OR. iom_use("soce_pra") .OR. iom_use("sst_pot") .OR. iom_use("sss_pra") &
@@ -320,6 +323,7 @@ CONTAINS
       CALL iom_put( "avt" , avt )                  ! T vert. eddy diff. coef.
       CALL iom_put( "avs" , avs )                  ! S vert. eddy diff. coef.
       CALL iom_put( "avm" , avm )                  ! T vert. eddy visc. coef.
+      CALL iom_put( "htau" , htau )                ! htau scaling
 
       IF( iom_use('logavt') )   CALL iom_put( "logavt", LOG( MAX( 1.e-20_wp, avt(:,:,:) ) ) )
       IF( iom_use('logavs') )   CALL iom_put( "logavs", LOG( MAX( 1.e-20_wp, avs(:,:,:) ) ) )
