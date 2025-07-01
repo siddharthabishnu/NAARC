@@ -209,7 +209,7 @@ else
   case "${HPC_TARG}"
     in
     archer2) ln -s /work/n01/shared/NAARC/$NEMO_VER INPUTS
-             ln -s /work/n01/shared/nemo/FORCING FORCING
+             ln -s /work/n01/shared/nemo/FORCING/JRA FORCING
              ;;
     anemone) ln -s /dssgfs01/working/jdha/NAARC/$NEMO_VER INPUTS
              ln -s /dssgfs01/working/acc/FORCING FORCING
