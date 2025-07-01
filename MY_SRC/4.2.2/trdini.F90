@@ -10,7 +10,7 @@ MODULE trdini
    !!   trd_init      : initialization step
    !!----------------------------------------------------------------------
    USE dom_oce        ! ocean domain
-!  USE sbc_oce        ! for sea ice flag and ice-ocean stresses
+   USE sbc_oce        ! for sea ice flag and ice-ocean stresses
    USE domtile
    USE trd_oce        ! trends: ocean variables
    USE trdken         ! trends: 3D kinetic   energy
@@ -81,8 +81,8 @@ CONTAINS
       !
 
       ! Allocate (partial) ice-ocean stresses (only used for dynamics trends diagnostics). 
-!     IF( l_trddyn .and. nn_ice == 2 ) ALLOCATE( uiceoc(jpi,jpj), uiceoc_b(jpi,jpj), &
-!                                                viceoc(jpi,jpj), viceoc_b(jpi,jpj) )
+      IF( l_trddyn .and. nn_ice == 2 ) ALLOCATE( uiceoc(jpi,jpj), uiceoc_b(jpi,jpj), &
+                                                 viceoc(jpi,jpj), viceoc_b(jpi,jpj) )
 
 !!gm check the stop below
       IF( ln_dyn_mxl )   CALL ctl_stop( 'ML diag on momentum are not yet coded we stop' )
