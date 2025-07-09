@@ -905,6 +905,16 @@
    ln_diahsb   =.false.,   !  output the heat and salt budgets (T) or not (F)
 /
 !-----------------------------------------------------------------------
+&nam_diadct    !   transports through some sections                     (default: OFF)
+!-----------------------------------------------------------------------
+    ln_diadct  =.true.,   ! Calculate transport thru sections or not
+       nn_dct     = 12     !  time step frequency for transports computing
+       nn_dctwri  = 288   !  time step frequency for transports writing
+       nn_secdebug = 0   !      0 : no section to debug
+     !                   !     -1 : debug all section
+     !                   !  0 < n : debug section number n
+/
+!-----------------------------------------------------------------------
 &nam_dia25h    !  25h Mean Output                                       (default: OFF)
 !-----------------------------------------------------------------------
    ln_dia25h   =.false.,   ! Choose 25h mean output or not
