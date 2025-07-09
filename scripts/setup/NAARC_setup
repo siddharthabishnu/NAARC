@@ -225,6 +225,7 @@ cd $CONFIG_DIR/EXPREF
 
 mkdir meta_out
 mkdir RESTARTS
+mkdir TRANSPORTS
 mkdir OUTPUTS
 mkdir OUTPUTS_PROCESSED
 mkdir OUTPUTS_ZIP

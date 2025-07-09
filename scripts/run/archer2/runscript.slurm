@@ -339,6 +339,9 @@ do
       cp namelist_ice_cfg meta_out/namelist_ice_cfg.$suf
       cp run.stat meta_out/run.stat.$suf
       cp time.step meta_out/time.step.$suf
+      mv volume_transport TRANSPORTS/volume_transport.$suf
+      mv heat_transport TRANSPORTS/heat_transport.$suf
+      mv salt_transport TRANSPORTS/salt_transport.$suf
    done
    wait
 
