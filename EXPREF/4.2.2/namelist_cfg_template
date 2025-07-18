@@ -36,7 +36,8 @@
    nn_no       =       0   !  Assimilation cycle index
    cn_exp      =  "XXX_EXP_XXX"  !  experience name
 !  nn_it000    =    XXX_TST_XXX   !  first time step
-   nn_itend    =    8928   !  last  time step (std 5840)
+   nn_it000    =    1   !  first time step
+   nn_itend    =    288   !  last  time step (std 5840)
 !  nn_itend    =    XXX_TEN_XXX   !  last  time step (std 5840)
    nn_date0    =  XXX_YEAR_XXX0101   !  date at nit_0000 (format yyyymmdd) used if ln_rstart=F or (ln_rstart=T and nn_rstctl=0 or 1)
    nn_time0    =       0000   !  initial time of day in hhmm
@@ -460,13 +461,13 @@
 &nambdy_tide   !  tidal forcing at open boundaries                      (default: OFF)
 !-----------------------------------------------------------------------
    filtide          = './INPUTS/NAARC_NP/NAARC_bdytide_FES2014_'   !  file name root of tidal forcing files
-   ln_bdytide_2ddta =.false.,                   !
+   ln_bdytide_2ddta = .false.,                   !
 /
 !-----------------------------------------------------------------------
 &nambdy_tide   !  tidal forcing at open boundaries                      (default: OFF)
 !-----------------------------------------------------------------------
    filtide          = './INPUTS/NAARC_NA/NAARC_bdytide_FES2014_'   !  file name root of tidal forcing files
-   ln_bdytide_2ddta =.false.,                   !
+   ln_bdytide_2ddta = .false.,                   !
 /
 !!======================================================================
 !!                ***  Top/Bottom boundary condition  ***             !!
@@ -907,7 +908,7 @@
 !-----------------------------------------------------------------------
 &nam_diadct    !   transports through some sections                     (default: OFF)
 !-----------------------------------------------------------------------
-    ln_diadct  =.true.,   ! Calculate transport thru sections or not
+    ln_diadct  =.false.,   ! Calculate transport thru sections or not
        nn_dct     = 12     !  time step frequency for transports computing
        nn_dctwri  = 288   !  time step frequency for transports writing
        nn_secdebug = 0   !      0 : no section to debug
