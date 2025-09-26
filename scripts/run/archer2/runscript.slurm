@@ -4,7 +4,7 @@
 #SBATCH --account=n01-CANARI
 #SBATCH --partition=standard
 #SBATCH --qos=standard
-#SBATCH --nodes=50
+#SBATCH --nodes=51
 #SBATCH --ntasks-per-core=1
 
 display_usage() {
@@ -55,21 +55,22 @@ export UCX_IB_REG_METHODS=direct
 #################### nemo runscript options ############################
 # For info on the parameters see namelist_ref                          #
 ########################################################################
-rn_rdt=300          ; ln_zps='.false.'      ; ln_tmx_itf='.false.'
-ln_bt_auto='.true.' ; rn_bt_cmax=0.8        ; nn_baro=30
-nn_mxlice=2         ; nn_z0_ice=1           ; ln_rnf_new='.false.'
-ln_rstdate='.true.' ; ln_shlat2d='.false.'  ; nn_diaharm=1991
-rn_Cd0=2.5e-3       ; ln_loglayer='.true.'  ; ln_tide='.true.'
-ln_boost='.false.'  ; ln_gls='.true.'       ; ln_int_wave_drag='.false.' 
-ln_hpg_djc='.true.' ;                         ln_calc_tdiss='.false.'
+rn_rdt=300          ; ln_zps='.false.'       ; ln_tmx_itf='.false.'
+ln_bt_auto='.true.' ; rn_bt_cmax=0.8         ; nn_baro=30
+nn_mxlice=2         ; nn_z0_ice=1            ; ln_rnf_new='.false.'
+ln_rstdate='.true.' ; ln_shlat2d='.false.'   ; nn_diaharm=1991
+rn_Cd0=2.5e-3       ; ln_loglayer='.true.'   ; ln_tide='.true.'
+ln_boost='.false.'  ; ln_gls='.true.'        ; ln_int_wave_drag='.false.' 
+ln_hpg_djc='.true.' ; ln_calc_tdiss='.false.'; ln_crt_fbk='.false.'
+ln_frm_drg='.false.'; rn_frm_ht0=0.0         ; ln_cdmin2d='.false.'
 ########################################################################
 
 
 #################### runscript options #################################
 # Controls for the simulation                                          #
 ########################################################################
-ln_spin='.false.'    # Do we require a spin up phase for the ice
-nn_spin=0           # How many years spin up
+ln_spin='.false.'   # Do we require a spin up phase for the ice
+nn_spin=-1          # How many years spin up
 year_st=1979        # Start year of the simulation (ramains constant)
 year_en=1979        # End year of this job submission
 offset=0            # If rdt has changed, an offset to nn_it000 is needed
@@ -95,9 +96,9 @@ then
    elif [ $SLURM_NNODES -eq 29 ]
    then
       SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 2973 -g 8 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
-   elif [ $SLURM_NNODES -eq 50 ]
+   elif [ $SLURM_NNODES -eq 51 ]
    then
-      SRUN_CMD=`./slurm_setup -S 16 -s 16 -m 1 -C 6131 -g 9000 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
+      SRUN_CMD=`./slurm_setup -S 24 -s 16 -m 1 -C 6131 -g 9000 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
    elif [ $SLURM_NNODES -eq 68 ]
    then
       SRUN_CMD=`./slurm_setup -S 32 -s 16 -m 2 -C 8090 -g 9000 -N 128 -t 01:00:00 -a n01-CLASS -j se-nemo`
@@ -132,6 +133,13 @@ else
 
 fi
 
+if [ "ln_frm_drg"=".false." ]
+then
+   ln_cst_drg='.true.'
+else
+   ln_cst_drg='.false.'
+fi
+ 
 if [ "$ln_zps" = ".true." ]
 then
    ln_trabbl='.true.'
@@ -310,11 +318,17 @@ do
       sed -i "s/XXX_PNJ_XXX/$nn_jpnj/g" namelist_cfg
       sed -i "s/XXX_TDG_XXX/$ln_int_wave_drag/g" namelist_cfg
       sed -i "s/XXX_CTD_XXX/$ln_calc_tdiss/g" namelist_cfg
+      sed -i "s/XXX_FBK_XXX/$ln_crt_fbk/g" namelist_cfg
+      sed -i "s/XXX_C2D_XXX/$ln_cdmin2d/g" namelist_cfg
+      sed -i "s/XXX_FRM_XXX/$ln_frm_drg/g" namelist_cfg
+      sed -i "s/XXX_CST_XXX/$ln_cst_drg/g" namelist_cfg
+      sed -i "s/XXX_HT0_XXX/$rn_frm_ht0/g" namelist_cfg
 
    done
 
    for ens in "${ARRAY[@]}"
    do
+      date
       eval $SRUN_CMD &
       echo $SRUN_CMD &
       ./time_step_chk $SLURM_JOB_ID $nn_itend &
@@ -345,13 +359,19 @@ do
    done
    wait
 
+   echo "Moved output"
+
    current_stp=`sed -n 1,1p time.step`
    if [ ! $current_stp -eq $nn_itend ]
    then
       exit
    fi
 
-   if [ $nn_spin_cycle -gt $nn_spin ]
+   echo "current_stp"
+   echo $current_stp
+   echo $nn_itend
+
+   if [ $nn_spin_cycle -gt $nn_spin ] || [ "$ln_spin" = ".false." ]
    then
       year=$(($year+1))
    else
@@ -359,11 +379,11 @@ do
    fi
 
    nextyear=`./check_runtime $SLURM_JOB_ID $YEAR $year`
-   exit
 
 done
 
 # chunk/zip data
+echo "Zipping"
 sbatch runzip.slurm
 
 # if year -gt year_end no need to go again
@@ -372,7 +392,7 @@ then
    exit
 else
    echo 'Submitting runscript ' $year $nn_spin_cycle
-   sbatch rs_tmp -y $year -s $nn_spin_cycle
+   sbatch runscript.slurm -y $year -s $nn_spin_cycle
 fi
 
 exit
