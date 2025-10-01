@@ -225,7 +225,7 @@
    rn_shlat    =  0.   !  shlat = 0  !  0 < shlat < 2  !  shlat = 2  !  2 < shlat
    ln_shlat2d=XXX_SHA_XXX,
    ln_vorlat=.false.,
-   cn_shlat2d_file='./INPUTS/shlat2d.nc',
+   cn_shlat2d_file='./shlat2d.nc',
    cn_shlat2d_var='shlat2d',
 /
 !-----------------------------------------------------------------------
@@ -281,7 +281,7 @@
    ln_coords_file =.true., .true.,     !  =T : read bdy coordinates from file
       cn_coords_file = './INPUTS/NAARC_NP/coordinates_NP.bdy.nc', './INPUTS/NAARC_NA/coordinates_NA.bdy.nc'  !  bdy coordinates files
    ln_mask_file   =.true.,   !  =T : read mask from file
-      cn_mask_file = './INPUTS/bdy_msk.nc'        !  name of mask file (if ln_mask_file=.TRUE.,)
+      cn_mask_file = './INPUTS/bdy_msk_updated.nc'        !  name of mask file (if ln_mask_file=.TRUE.,)
    cn_dyn2d    = 'flather', 'flather'       !
    nn_dyn2d_dta   =  XXX_BTD_XXX, XXX_BTD_XXX        !  = 0, bdy data are equal to the initial state
       !                       !  = 1, bdy data are read in 'bdydata   .nc' files
@@ -407,7 +407,7 @@
    rn_ke0      =  2.5e-3   !  background kinetic energy  [m2/s2] (non-linear cases)
    rn_z0       =  3.e-3    !  roughness [m] (ln_loglayer=T)
    ln_boost    = XXX_BOO_XXX,   !  =T regional boost of Cd0 ; =F constant
-      rn_boost =  50.         !  local boost factor  [-]
+      rn_boost =  2.         !  local boost factor  [-]
 /
 !-----------------------------------------------------------------------
 &nambbc        !   bottom temperature boundary condition                (default: OFF)
