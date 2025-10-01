@@ -58,11 +58,11 @@ export UCX_IB_REG_METHODS=direct
 rn_rdt=300          ; ln_zps='.false.'       ; ln_tmx_itf='.false.'
 ln_bt_auto='.true.' ; rn_bt_cmax=0.8         ; nn_baro=30
 nn_mxlice=2         ; nn_z0_ice=1            ; ln_rnf_new='.false.'
-ln_rstdate='.true.' ; ln_shlat2d='.false.'   ; nn_diaharm=1991
+ln_rstdate='.true.' ; ln_shlat2d='.true.'   ; nn_diaharm=1991
 rn_Cd0=2.5e-3       ; ln_loglayer='.true.'   ; ln_tide='.true.'
-ln_boost='.false.'  ; ln_gls='.true.'        ; ln_int_wave_drag='.false.' 
+ln_boost='.true.'  ; ln_gls='.true.'        ; ln_int_wave_drag='.false.' 
 ln_hpg_djc='.true.' ; ln_calc_tdiss='.false.'; ln_crt_fbk='.false.'
-ln_frm_drg='.false.'; rn_frm_ht0=0.0         ; ln_cdmin2d='.false.'
+ln_frm_drg='.false.'; rn_frm_ht0=0.0         ; ln_cdmin2d='.true.'
 ########################################################################
 
 
@@ -133,7 +133,7 @@ else
 
 fi
 
-if [ "ln_frm_drg"=".false." ]
+if [ "$ln_frm_drg" = ".false." ]
 then
    ln_cst_drg='.true.'
 else
@@ -271,7 +271,7 @@ do
          sed "s/XXX_RS0_XXX/$nam\_S$(($nn_spin_cycle-1))_$rs0\_restart_ice/g" namelist_ice_cfg_template > namelist_ice_cfg
       else
          sed    "s/XXX_EXP_XXX/$nam/g" namelist_cfg_template > namelist_cfg
-	 if [ $year -eq $year_st ]
+	 if [ $year -eq $year_st ] && [ "$ln_spin" = ".true." ]
          then
             sed -i "s/XXX_RS0_XXX/$nam\_S$(($nn_spin_cycle-1))_$rs0\_restart/g" namelist_cfg
             sed "s/XXX_RS0_XXX/$nam\_S$(($nn_spin_cycle-1))_$rs0\_restart_ice/g" namelist_ice_cfg_template > namelist_ice_cfg
@@ -338,7 +338,7 @@ do
    date
    for ens in "${ARRAY[@]}"
    do
-      if [ $year -eq $year_st ] && [ $nn_spin_cycle -le $nn_spin ]
+      if [ $year -eq $year_st ] && [ $nn_spin_cycle -le $nn_spin ] && [ "$ln_spin" = ".true." ]
       then
          suf=$year\_S$nn_spin_cycle
       else
